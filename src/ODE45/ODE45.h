@@ -24,6 +24,10 @@ public:
 
     virtual std::vector<double> calc_func(std::vector<double> X) = 0;
 
+    std::vector<std::vector<double> > get_resul() { return res; }
+
+    bool write_result_in_file(const char* file_name);
+
 private:
 
     std::vector<std::vector<double> > solve(std::vector<double> X, double step_length, unsigned amount_steps);
@@ -42,6 +46,9 @@ private:
             , std::vector<double> const &K4
             , double step_length                );
 
+
+
+    std::vector<std::vector<double> > res;
 };
 
 

@@ -39,11 +39,12 @@ int main()
     init.push_back(1);
 
     std::vector<std::vector<double> > res;
-    res = solver.run_ode(init, 0.0001, 10000);
+    res = solver.run_ode(init, 0.1, 10);
 
+    unsigned step_num = 0;
     for(auto const &str : res)
     {
-        LM(LD, "col:")
+        LM(LD, "step " + std::to_string(step_num++))
 
         for(auto const &row : str)
         {
@@ -53,4 +54,6 @@ int main()
             std::to_string(row);
         }
     }
+
+    solver.write_result_in_file("result/unit_test.log");
 }

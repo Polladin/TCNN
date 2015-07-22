@@ -29,7 +29,7 @@ const char* toString(log_lvl_const lvl)
 
 void print_log(std::string str, unsigned lvl, const char* file, int line)
 {
-    std::cout << file << " " << line << ":" <<toString(log_lvl_const(lvl)) << str << std::endl;
+    std::cout << file << "[" << line << "]:" <<toString(log_lvl_const(lvl)) << str << std::endl;
 }
 
 }// end namespace logging

@@ -5,6 +5,8 @@
  *      Author: alex
  */
 
+#include <fstream>
+
 #include "ODE45.h"
 #include "../debugLog.h"
 
@@ -18,11 +20,12 @@ std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_con
 std::vector<std::vector<double> > ODE45::solve(std::vector<double> X, double step_length, unsigned amount_steps)
 {
    std::vector<double> C, K1, K2, K3, K4;
-   std::vector<std::vector<double> > res;
+
+   res.clear();
+   res.push_back(X);
 
    for (unsigned step = 0; step < amount_steps; ++step)
    {
-       LM(LD,std::string("step - ") + std::to_string(step));
        K1 = calc_func(X);
        K2 = calc_func(calc_K_by_h_div_2(X,K1,step_length));
        K3 = calc_func(calc_K_by_h_div_2(X,K2,step_length));
@@ -66,3 +69,32 @@ std::vector<double> ODE45::calc_new_X(std::vector<double> const &X
     }
     return res;
 }
+
+
+bool ODE45::write_result_in_file(const char* file_name)
+{
+    try
+    {
+        std::ofstream file_out;
+        file_out.open (file_name, std::ofstream::out );
+
+        for(auto const &row : res)
+        {
+            for (auto const &elem : row)
+            {
+                file_out << elem << "\t";
+            }
+            file_out << "\n";
+        }
+    }
+    catch(...)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+
