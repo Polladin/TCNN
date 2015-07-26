@@ -5,3 +5,8 @@ Debug/
 result
 *.o
 *.log
+*.pyc
+__pycache__
+.pydevproject
+
+
