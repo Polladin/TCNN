@@ -8,7 +8,7 @@
 #include <fstream>
 
 #include "ODE45.h"
-#include "../debugLog.h"
+#include "../debugLog/debugLog.h"
 
 std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_conditions, double step_length, unsigned amount_steps )
 {
@@ -76,7 +76,7 @@ bool ODE45::write_result_in_file(const char* file_name)
     try
     {
         std::ofstream file_out;
-        file_out.open (file_name, std::ofstream::out );
+        file_out.open (file_name, std::ios::out ); //std::ofstream::out
 
         for(auto const &row : res)
         {
@@ -89,6 +89,7 @@ bool ODE45::write_result_in_file(const char* file_name)
     }
     catch(...)
     {
+        LM(LE, "have failed to write to file")
         return false;
     }
 

@@ -4,9 +4,9 @@ CC=g++
 
 CFLAGS=-c -std=c++11 -Wall
 
-SRC= 	../src/debugLog.cpp 	\
-	../src/ODE45/ODE45.cpp	\
-	../test/unit_test.cpp
+SRC= 	../common/debugLog/debugLog.cpp 	\
+	../common/ODE45/ODE45.cpp		\
+	../common/test/unit_test.cpp
 
 OBJ=$(SRC:.cpp=.o)
 
