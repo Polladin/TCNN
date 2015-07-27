@@ -6,13 +6,18 @@
  */
 
 #include <fstream>
+#include <assert.h>
 
 #include "ODE45.h"
 #include "../debugLog/debugLog.h"
 
-std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_conditions, double step_length, unsigned amount_steps )
+std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_conditions, double set_step_length, unsigned set_amount_steps )
 {
     LM(LI, "Start solve for ODE45")
+
+    step_length = set_step_length;
+    amount_steps = set_amount_steps;
+
     return solve(initial_conditions, step_length, amount_steps);
 }
 
@@ -70,6 +75,25 @@ std::vector<double> ODE45::calc_new_X(std::vector<double> const &X
     return res;
 }
 
+
+std::vector<double> ODE45::get_next()
+{
+    std::vector<double> C, K1, K2, K3, K4;
+
+    assert(res.size() != 0); //, "for get_next need initial step");
+
+    std::vector<double> X = res[res.size()-1];
+
+    K1 = calc_func(X);
+    K2 = calc_func(calc_K_by_h_div_2(X,K1,step_length));
+    K3 = calc_func(calc_K_by_h_div_2(X,K2,step_length));
+    K4 = calc_func(calc_K_by_h(X,K1,step_length));
+
+    X = calc_new_X(X, K1, K2, K3, K4, step_length);
+    res.push_back(X);
+
+    return res[res.size()-1];
+}
 
 bool ODE45::write_result_in_file(const char* file_name)
 {

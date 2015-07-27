@@ -26,9 +26,11 @@ public:
 
     bool write_result_in_file(const char* file_name);
 
-private:
+    std::vector<double> get_next();
 
     std::vector<std::vector<double> > solve(std::vector<double> X, double step_length, unsigned amount_steps);
+
+private:
 
     std::vector<double> calc_K_by_h(std::vector<double> const &X, std::vector<double> const &K, double const &h);
 
@@ -47,6 +49,9 @@ private:
 
 
     std::vector<std::vector<double> > res;
+
+    double step_length;
+    double amount_steps;
 };
 
 
