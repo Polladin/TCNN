@@ -12,7 +12,7 @@
 
 std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_conditions, double step_length, unsigned amount_steps )
 {
-    LM(LD,"run_ode");
+    LM(LI, "Start solve for ODE45")
     return solve(initial_conditions, step_length, amount_steps);
 }
 
@@ -89,7 +89,6 @@ bool ODE45::write_result_in_file(const char* file_name)
     }
     catch(...)
     {
-        LM(LE, "have failed to write to file")
         return false;
     }
 

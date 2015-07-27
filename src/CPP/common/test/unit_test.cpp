@@ -42,6 +42,9 @@ int main(int argc, char* argv[])
     double steps = 0;
     double step_len = 0;
 
+    DISP_LOG_LVL = LD;
+    LOG_MODE = ALL;
+
     for (int i = 1; i < argc; ++i)
     {
         LM(LD, argv[i])
@@ -57,6 +60,8 @@ int main(int argc, char* argv[])
             LM(LD, "Set step length: " + std::to_string(step_len));
         }
     }
+
+    std::to_string(steps);
 
     if (steps    == 0) steps    = DEFAULT_STEPS;
     if (step_len == 0) step_len = DEFAULT_STEP_LENGTH;

@@ -11,22 +11,43 @@
 
 #include <iostream>
 #include <string>
+#include <string.h>
 
-#define LM(lvl,str) logging::print_log(str, lvl, __FILE__, __LINE__);
+
+enum dispLogMode
+{
+      ALL
+    , ENABLED_LIST
+    , DISABLED_LIST
+};
 
 enum log_lvl_const
 {
-    LD,
-    LE,
-    LI
+      LD
+    , LI
+    , LW
+    , LE
+    , NONE_DISP_LOG
 };
+
+extern dispLogMode   LOG_MODE;
+extern log_lvl_const DISP_LOG_LVL;
+
+
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+
+#define LM(lvl,str) logging::print_log(str, lvl, __FILENAME__, __LINE__);
+
+
 
 namespace logging
 {
 
-const char* toString(log_lvl_const lvl);
+const char* toString(log_lvl_const const &lvl);
 
-void print_log(std::string str, unsigned lvl, const char* file, int line);
+void write_to_log(std::string const &str, unsigned const &lvl, const char* file, int const &line);
+
+void print_log(std::string const &str, unsigned const &lvl, const char* file, int const &line);
 
 
 }// end namespace logging

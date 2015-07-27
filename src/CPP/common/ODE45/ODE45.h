@@ -11,8 +11,6 @@
 #include <vector>
 
 
-#define LM
-
 class ODE45
 {
 public:
