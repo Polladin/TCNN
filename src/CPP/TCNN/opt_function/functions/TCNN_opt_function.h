@@ -23,6 +23,8 @@ public:
 
     double func(double x);
 
+    bool write_func_to_file(double x_begin, double x_end, unsigned steps, const char* file_name);
+
 private:
 
     Chaotic chaos_fuction;

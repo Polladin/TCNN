@@ -97,6 +97,7 @@ std::vector<double> ODE45::get_next()
 
 bool ODE45::write_result_in_file(const char* file_name)
 {
+    //TODO : make common function to write in file
     try
     {
         std::ofstream file_out;

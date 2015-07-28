@@ -5,9 +5,11 @@
  *      Author: alex
  */
 
+#include <fstream>
 #include <cmath>
 
 #include "TCNN_opt_function.h"
+#include "../../../common/debugLog/debugLog.h"
 
 
 TCNN_opt_function::TCNN_opt_function()
@@ -20,7 +22,7 @@ TCNN_opt_function::TCNN_opt_function()
     X.push_back(-0.1);
     X.push_back(0);
     X.push_back(0);
-    chaos_fuction.solve(X, step_length,1);
+    chaos_fuction.run_ode(X, step_length,1);
 }
 
 double TCNN_opt_function::df_gen(double x, double h)
@@ -42,7 +44,56 @@ std::vector<double> TCNN_opt_function::calc_func(std::vector<double> X)
     std::vector<double> chaoticValue = chaos_fuction.get_next();
 
     dX[0] = 1;
-    dX[1] = chaoticValue[2] - alpha * df_gen(X[1], step_length);
+    dX[1] = chaoticValue[3] - alpha * df_gen(X[1], step_length); //chaoticValue[2]
 
     return dX;
 }
+
+
+bool TCNN_opt_function::write_func_to_file(double x_begin, double x_end, unsigned steps, const char* file_name)
+{
+    if (x_end < x_begin)
+    {
+        LM(LW, "x_begin should be less than x_end");
+        return false;
+    }
+
+    std::vector<std::vector<double> > function_values;
+
+    double delta = (x_end - x_begin) / steps;
+
+    for (double x = x_begin; x < x_end; x += delta)
+    {
+        std::vector<double> row;
+        row.push_back(x);
+        row.push_back(func(x));
+
+        function_values.push_back(row);
+    }
+
+
+    //TODO : make common function to write in file
+    try
+    {
+        std::ofstream file_out;
+        file_out.open (file_name, std::ios::out );
+
+        for(auto const &row : function_values)
+        {
+            for (auto const &elem : row)
+            {
+                file_out << elem << "\t";
+            }
+            file_out << "\n";
+        }
+    }
+    catch(...)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+
