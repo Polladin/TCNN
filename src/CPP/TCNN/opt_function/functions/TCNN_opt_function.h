@@ -15,7 +15,7 @@
 class TCNN_opt_function : public ODE45
 {
 public:
-    TCNN_opt_function();
+    TCNN_opt_function(double step_length);
 
     virtual std::vector<double> calc_func(std::vector<double> X);
 
@@ -25,9 +25,16 @@ public:
 
     bool write_func_to_file(double x_begin, double x_end, unsigned steps, const char* file_name);
 
-private:
+    bool write_chaos_to_file(const char* file_name);
+
+
 
     Chaotic chaos_fuction;
+private:
+
+    double chaotic_coeff;
+
+    double chaotic_reduce_coeff;
 
     double step_length;
 

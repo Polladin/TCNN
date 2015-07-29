@@ -9,16 +9,24 @@ import matplotlib.pyplot as plt
 def column(matrix, i):
     return [row[i] for row in matrix]
 
-
-def plot_all(XX):    
+def check_min_2_colums(XX):
     if len(XX) == 0:
         print ("No input data")
-        return "ERR: no_data"
+        return [True, "ERR: no_data"]
     
     if len(XX[0]) == 1:
         print ("Presented only one dimension data")
-        return "ERR: only one dimension data"
+        return [True, "ERR: only one dimension data"]
+    
+    return [False, "SUCCESS"]
 
+
+def plot_all(XX):    
+    [err, res] = check_min_2_colums(XX)
+    
+    if err:
+        return res
+    
     ''' else len(XX) > 1 '''
     amount_subplots = len(XX[0]) - 1;
     
@@ -28,5 +36,20 @@ def plot_all(XX):
         plt.xlabel("Axes - " + str(i+1))
     
     plt.show();
-    return "SUCCESS"
+    return res
+
+
+
+def subplot(XX, amount_subplots, index):
+    [err, res] = check_min_2_colums(XX)
+    
+    if err:
+        return res
+    
+    plt.subplot(amount_subplots, 1, index)
+    plt.plot(column(XX,0),column(XX,1))
+    plt.xlabel("Axes - " + str(index))
+    
+    return res
+    
     
