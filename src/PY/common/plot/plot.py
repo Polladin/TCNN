@@ -40,14 +40,14 @@ def plot_all(XX):
 
 
 
-def subplot(XX, amount_subplots, index):
+def subplot(XX, amount_subplots, index, col = 1):
     [err, res] = check_min_2_colums(XX)
     
     if err:
         return res
     
     plt.subplot(amount_subplots, 1, index)
-    plt.plot(column(XX,0),column(XX,1))
+    plt.plot(column(XX,0),column(XX,col))
     plt.xlabel("Axes - " + str(index))
     
     return res

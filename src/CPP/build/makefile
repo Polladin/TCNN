@@ -9,6 +9,7 @@ SRC= 	../common/debugLog/debugLog.cpp 			\
 	../common/test/unit_test.cpp				\
 	../TCNN/opt_function/chaotic/chaotic.cpp		\
 	../TCNN/opt_function/functions/TCNN_opt_function.cpp	\
+	../common/common.cpp					\
 	../TCNN/opt_function/test/opt_func_test.cpp
 
 OBJ=$(SRC:.cpp=.o)

@@ -15,6 +15,18 @@
 class Chaotic : public ODE45
 {
 
+public:
+
+    void solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps)
+    {
+        ODE45::solve(init_initial_conditions, init_step_length, init_amount_steps);
+    }
+
+    void solve(unsigned init_amount_steps)
+    {
+        ODE45::solve(init_amount_steps);
+    }
+
     virtual std::vector<double> calc_func(std::vector<double> X);
 
 };

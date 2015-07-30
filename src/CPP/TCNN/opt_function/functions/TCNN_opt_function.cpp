@@ -12,11 +12,8 @@
 #include "../../../common/debugLog/debugLog.h"
 
 
-TCNN_opt_function::TCNN_opt_function(double step_length_init)
+TCNN_opt_function::TCNN_opt_function()
 {
-    alpha = 0.5;
-    step_length = step_length_init;
-
     chaotic_coeff = 10;
     chaotic_reduce_coeff = 1 - step_length / 100.0;
 
@@ -25,7 +22,7 @@ TCNN_opt_function::TCNN_opt_function(double step_length_init)
     X.push_back(-0.1);
     X.push_back(0);
     X.push_back(0);
-    chaos_fuction.run_ode(X, step_length,1);
+    chaos_fuction.solve(X, step_length,1);
 }
 
 double TCNN_opt_function::df_gen(double x, double h)
@@ -46,7 +43,10 @@ double TCNN_opt_function::func(double x)
 std::vector<double> TCNN_opt_function::calc_func(std::vector<double> X)
 {
     std::vector<double> dX(X.size());
-    std::vector<double> chaoticValue = chaos_fuction.get_next();
+    std::vector<double> chaoticValue;
+
+    chaos_fuction.solve(1);
+    chaoticValue = chaos_fuction.result_last();
 
     dX[0] = 1;
     dX[1] = chaotic_coeff*chaoticValue[3] - alpha * df_gen(X[1], 0.00001); //chaoticValue[2]
@@ -78,26 +78,7 @@ bool TCNN_opt_function::write_func_to_file(double x_begin, double x_end, unsigne
         function_values.push_back(row);
     }
 
-
-    //TODO : make common function to write in file
-    try
-    {
-        std::ofstream file_out;
-        file_out.open (file_name, std::ios::out );
-
-        for(auto const &row : function_values)
-        {
-            for (auto const &elem : row)
-            {
-                file_out << elem << "\t";
-            }
-            file_out << "\n";
-        }
-    }
-    catch(...)
-    {
-        return false;
-    }
+    write_to_file(file_name, function_values);
 
     return true;
 }
@@ -105,6 +86,6 @@ bool TCNN_opt_function::write_func_to_file(double x_begin, double x_end, unsigne
 
 bool TCNN_opt_function::write_chaos_to_file(const char* file_name)
 {
-    return chaos_fuction.write_result_in_file(file_name);
+    return chaos_fuction.result_write_to_file(file_name);
 }
 

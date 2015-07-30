@@ -59,14 +59,17 @@ def plot_from_file(result_file_name):
 '''
 Plot data on one the part
 '''
-def sub_plot_from_file(result_file_name, amount_plots, index):
+def sub_plot_from_file(result_file_name, amount_plots, index, col = 1):
     XX = fill_data_from_file(result_file_name)
     
-    res = subplot(XX, amount_plots, index)
+    res = subplot(XX, amount_plots, index, col)
+    
+    print (result_file_name + ":")
+    print (XX[-1])
     
     if index == amount_plots:
         plt.show()
-        
+    
     return res
 
 def test(bin_path, result_file_name):
@@ -102,7 +105,7 @@ run_bin_file(BIN_ODE_FILEPATH)
  
 res = sub_plot_from_file(RESULT_FILE_PATH, 3, 1)
 res = sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 2)
-res = sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS, 3, 3)
+res = sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS, 3, 3, 3)
 
 
 

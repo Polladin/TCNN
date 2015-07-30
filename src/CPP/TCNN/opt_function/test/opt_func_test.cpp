@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     if (steps    == 0) steps    = DEFAULT_STEPS;
     if (step_len == 0) step_len = DEFAULT_STEP_LENGTH;
 
-    TCNN_opt_function testFunc(step_len);
+    TCNN_opt_function testFunc;
 
     std::vector<double> init;
     init.push_back(0);
@@ -54,30 +54,12 @@ int main(int argc, char* argv[])
 //    testFunc.write_func_to_file(-1.0, 3.5, 10000, "function.log");
 
     std::vector<std::vector<double> > res;
-    res = testFunc.run_ode(init, step_len, steps);
 
-    std::vector<double> X;
-    X.push_back(0);
-    X.push_back(-0.1);
-    X.push_back(0);
-    X.push_back(0);
+    testFunc.solve_function(init, step_len, steps);
+    res = testFunc.result_take();
 
-    //testFunc.chaos_fuction.run_ode(X, 0.1, steps);
-
-    testFunc.write_result_in_file("opt_func_res.log");
+    testFunc.result_write_to_file("opt_func_res.log");
     testFunc.write_chaos_to_file("chaos.log");
     testFunc.write_func_to_file(-1.0, 3.5, 1000, "function.log");
 
-//    unsigned step_num = 0;
-//    for(auto const &str : res)
-//    {
-//        LM(LD, "step " + std::to_string(step_num++))
-//
-//        for(auto const &row : str)
-//        {
-//            sprintf(buf, "\t row: %.15f", row);
-////            LM(LD, std::string("\t row: ") + std::to_string(row));
-//            LM(LD, buf);
-//        }
-//    }
 }
