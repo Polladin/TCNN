@@ -9,6 +9,8 @@
 #include <assert.h>
 
 #include "ODE45.h"
+
+#include "../common.h"
 #include "../debugLog/debugLog.h"
 
 std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_conditions, double set_step_length, unsigned set_amount_steps )
@@ -22,28 +24,84 @@ std::vector<std::vector<double> > ODE45::run_ode(std::vector<double> initial_con
 }
 
 
-std::vector<std::vector<double> > ODE45::solve(std::vector<double> X, double step_length, unsigned amount_steps)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////        Solver with different parameters
+////////////
+void ODE45::solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps)
 {
-   std::vector<double> C, K1, K2, K3, K4;
+    step_length         = init_step_length;
+    amount_steps        = init_amount_steps;
+    initial_conditions  = init_initial_conditions;
+
+    solve();
+}
+
+void ODE45::solve(double init_step_length, unsigned init_amount_steps)
+{
+    step_length     = init_step_length;
+    amount_steps    = init_amount_steps;
+
+    solve();
+}
+
+void ODE45::solve(std::vector<double> init_initial_conditions)
+{
+    initial_conditions = init_initial_conditions;
+
+    solve();
+}
+
+void ODE45::solve(unsigned init_amount_steps)
+{
+    amount_steps = init_amount_steps;
+
+    solve();
+}
+
+void ODE45::solve()
+{
+    LM(LI, "Start solve for ODE45 with params: step_length-" + std::to_string(step_length) + " steps-" + std::to_string(amount_steps));
+
+   std::vector<double> X, C, K1, K2, K3, K4;
+
+   X = initial_conditions;
 
    res.clear();
    res.push_back(X);
 
    for (unsigned step = 0; step < amount_steps; ++step)
    {
-       K1 = calc_func(X);
-       K2 = calc_func(calc_K_by_h_div_2(X,K1,step_length));
-       K3 = calc_func(calc_K_by_h_div_2(X,K2,step_length));
-       K4 = calc_func(calc_K_by_h(X,K1,step_length));
-
-       X = calc_new_X(X, K1, K2, K3, K4, step_length);
-       res.push_back(X);
+       solve_one_step(X, C, K1, K2, K3, K4);
    }
-
-   return res;
 }
 
 
+inline void ODE45::solve_one_step(    std::vector<double> &X
+                                    , std::vector<double> &C
+                                    , std::vector<double> &K1
+                                    , std::vector<double> &K2
+                                    , std::vector<double> &K3
+                                    , std::vector<double> &K4   )
+{
+   K1 = calc_func(X);
+   K2 = calc_func(calc_K_by_h_div_2(X,K1,step_length));
+   K3 = calc_func(calc_K_by_h_div_2(X,K2,step_length));
+   K4 = calc_func(calc_K_by_h(X,K1,step_length));
+
+   X = calc_new_X(X, K1, K2, K3, K4, step_length);
+   res.push_back(X);
+}
+////////////
+////////////        END Solver with different parameters
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////        Helper functions for solver
+////////////
 std::vector<double> ODE45::calc_K_by_h(std::vector<double> const &X, std::vector<double> const &K, double const &h)
 {
     std::vector<double> res(X.size());
@@ -55,7 +113,6 @@ std::vector<double> ODE45::calc_K_by_h(std::vector<double> const &X, std::vector
 
     return res;
 }
-
 
 std::vector<double> ODE45::calc_new_X(std::vector<double> const &X
         , std::vector<double> const &K1
@@ -74,6 +131,10 @@ std::vector<double> ODE45::calc_new_X(std::vector<double> const &X
     }
     return res;
 }
+////////////
+////////////        END Helper functions for solver
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 std::vector<double> ODE45::get_next()
@@ -95,30 +156,6 @@ std::vector<double> ODE45::get_next()
     return res[res.size()-1];
 }
 
-bool ODE45::write_result_in_file(const char* file_name)
-{
-    //TODO : make common function to write in file
-    try
-    {
-        std::ofstream file_out;
-        file_out.open (file_name, std::ios::out ); //std::ofstream::out
-
-        for(auto const &row : res)
-        {
-            for (auto const &elem : row)
-            {
-                file_out << elem << "\t";
-            }
-            file_out << "\n";
-        }
-    }
-    catch(...)
-    {
-        return false;
-    }
-
-    return true;
-}
 
 
 

@@ -12,10 +12,8 @@
 
 const double PI = 3.14159265359;
 
-struct Solver_result
-{
-	std::vector<std::vector<double> > res;
-};
+
+bool write_to_file(const char* file_name, std::vector<std::vector<double> > data);
 
 
 #endif /* SRC_COMMON_H_ */

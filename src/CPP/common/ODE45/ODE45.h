@@ -20,15 +20,32 @@ public:
 
     std::vector<std::vector<double> > run_ode(std::vector<double> initial_conditions, double step_length, unsigned amount_steps );
 
-    virtual std::vector<double> calc_func(std::vector<double> X) = 0;
+    bool result_write_to_file(const char* file_name) { return write_to_file(file_name, res); }
 
-    std::vector<std::vector<double> > get_resul() { return res; }
-
-    bool write_result_in_file(const char* file_name);
+    std::vector<std::vector<double> > result_take() { return res; }
 
     std::vector<double> get_next();
 
-    std::vector<std::vector<double> > solve(std::vector<double> X, double step_length, unsigned amount_steps);
+    void solve();
+    void solve(unsigned init_amount_steps)
+    void solve(std::vector<double> init_initial_conditions);
+    void solve(double init_step_length, unsigned init_amount_steps);
+    void solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////        Functions to set up initial conditions
+    void set_initial_conditions(std::vector<double> init_initial_conditions) { initial_conditions = init_initial_conditions; }
+    void set_step_length(double init_step_length) { step_length = init_step_length; }
+    void set_amount_steps(unsigned init_amount_steps) { amount_steps = init_amount_steps; }
+    ////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////        Pure virtual function to specify solving function
+    virtual std::vector<double> calc_func(std::vector<double> X) = 0;
+    ////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 private:
 
@@ -39,19 +56,30 @@ private:
         return calc_K_by_h(X, K, h/2.0);
     }
 
-    std::vector<double> calc_new_X(std::vector<double> const &X
-            , std::vector<double> const &K1
-            , std::vector<double> const &K2
-            , std::vector<double> const &K3
-            , std::vector<double> const &K4
-            , double step_length                );
+    std::vector<double> calc_new_X(   std::vector<double> const &X
+                                    , std::vector<double> const &K1
+                                    , std::vector<double> const &K2
+                                    , std::vector<double> const &K3
+                                    , std::vector<double> const &K4
+                                    , double step_length                );
+
+    inline void ODE45::solve_one_step(    std::vector<double> &X
+                                        , std::vector<double> &C
+                                        , std::vector<double> &K1
+                                        , std::vector<double> &K2
+                                        , std::vector<double> &K3
+                                        , std::vector<double> &K4       );
+
+
 
 
 
     std::vector<std::vector<double> > res;
 
-    double step_length;
-    double amount_steps;
+    double      step_length     {0.1};
+    unsigned    amount_steps    {10};
+
+    std::vector<double> initial_conditions;
 };
 
 

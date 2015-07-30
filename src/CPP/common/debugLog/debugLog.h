@@ -38,8 +38,6 @@ extern log_lvl_const DISP_LOG_LVL;
 
 #define LM(lvl,str) logging::print_log(str, lvl, __FILENAME__, __LINE__);
 
-
-
 namespace logging
 {
 
