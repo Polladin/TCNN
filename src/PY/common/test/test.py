@@ -107,7 +107,7 @@ res = sub_plot_from_file(RESULT_FILE_PATH, 3, 1)
 res = sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 2)
 res = sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS, 3, 3, 3)
 
-
+# res = sub_plot_from_file("chaos_test.log", 1, 1)
 
 
 print (res)

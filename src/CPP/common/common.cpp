@@ -11,7 +11,7 @@
 #include "common.h"
 #include "debugLog/debugLog.h"
 
-bool write_to_file(const char* file_name, std::vector<std::vector<double> > data)
+bool write_to_file(const char* file_name, std::vector<std::vector<double> > const &data)
 {
     try
     {

@@ -5,11 +5,15 @@
  *      Author: alex
  */
 
+#if 1
+
 #include <string.h>
 
 #include "../../../common/debugLog/debugLog.h"
 #include "../functions/TCNN_opt_function.h"
 #include "../chaotic/chaotic.h"
+#include "../../../common/ODE45/ODE45.h"
+#include "../../../common/common.h"
 
 const double DEFAULT_STEPS          = 10;
 const double DEFAULT_STEP_LENGTH    = 0.1;
@@ -19,9 +23,10 @@ char buf[255];
 int main(int argc, char* argv[])
 {
 
-    DISP_LOG_LVL = LI;
+    DISP_LOG_LVL = LD;
     LOG_MODE = ALL;
 
+    std::cout << "Test for function optimization has been started\n";
 
     double steps = 0;
     double step_len = 0;
@@ -45,21 +50,29 @@ int main(int argc, char* argv[])
     if (steps    == 0) steps    = DEFAULT_STEPS;
     if (step_len == 0) step_len = DEFAULT_STEP_LENGTH;
 
+//    baseODE45 chaos(new Chaotic);
+//    std::vector<double> X;
+//    X.push_back(0);
+//    X.push_back(-0.1);
+//    X.push_back(0);
+//    X.push_back(0);
+//    chaos.solve(X, step_len, steps);
+//    write_to_file("chaos_test.log", chaos.result_take());
+
     TCNN_opt_function testFunc;
 
     std::vector<double> init;
     init.push_back(0);
     init.push_back(-1);
 
-//    testFunc.write_func_to_file(-1.0, 3.5, 10000, "function.log");
-
-    std::vector<std::vector<double> > res;
-
-    testFunc.solve_function(init, step_len, steps);
-    res = testFunc.result_take();
+    testFunc.run_optimization(init, step_len, steps);
 
     testFunc.result_write_to_file("opt_func_res.log");
     testFunc.write_chaos_to_file("chaos.log");
     testFunc.write_func_to_file(-1.0, 3.5, 1000, "function.log");
 
+    std::cout << "Cpp code is done\n";
+    return 0;
 }
+
+#endif

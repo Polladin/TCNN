@@ -8,6 +8,7 @@
 #ifndef CPP_COMMON_DEBUGLOG_CONFIGLOGGING_H_
 #define CPP_COMMON_DEBUGLOG_CONFIGLOGGING_H_
 
+#include "debugLog.h"
 
 dispLogMode     LOG_MODE = ALL;
 log_lvl_const   DISP_LOG_LVL = LD;

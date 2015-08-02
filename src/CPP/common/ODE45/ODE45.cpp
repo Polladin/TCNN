@@ -13,83 +13,130 @@
 #include "../common.h"
 #include "../debugLog/debugLog.h"
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////        Solver with different parameters
+////////////        Initialize functions for solver
 ////////////
-void ODE45::solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps)
+void baseODE45::solve_init(std::vector<double> const &init_initial_conditions)
+{
+    res.clear();
+    res.push_back(init_initial_conditions);
+}
+
+void baseODE45::solve_init(double const &init_step_length, unsigned const &init_amount_steps)
+{
+    step_length         = init_step_length;
+    amount_steps        = init_amount_steps;
+}
+
+void baseODE45::solve_init(std::vector<double> const &init_initial_conditions, double const &init_step_length)
+{
+    step_length         = init_step_length;
+    res.clear();
+    res.push_back(init_initial_conditions);
+}
+
+void baseODE45::solve_init(std::vector<double> const &init_initial_conditions, double const &init_step_length, unsigned const &init_amount_steps)
 {
     step_length         = init_step_length;
     amount_steps        = init_amount_steps;
     res.clear();
     res.push_back(init_initial_conditions);
-
-    solve();
 }
 
-void ODE45::solve(double init_step_length, unsigned init_amount_steps)
+void baseODE45::solve_init_step_length(double const &init_step_length)
 {
-    step_length     = init_step_length;
-    amount_steps    = init_amount_steps;
-
-    solve();
+    step_length = init_step_length;
 }
+////////////
+////////////        END Initialize functions for solver
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ODE45::solve(std::vector<double> init_initial_conditions)
-{
-    res.clear();
-    res.push_back(init_initial_conditions);
 
-    LM(LI, "Start solve for ODE45 with params: step_length-" + std::to_string(step_length) + " steps-" + std::to_string(amount_steps));
 
-    solve();
-}
 
-void ODE45::solve(unsigned init_amount_steps)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////        Different solver's run functions for solver
+////////////
+void baseODE45::solve(unsigned init_amount_steps)
 {
     amount_steps = init_amount_steps;
 
     solve();
 }
 
-void ODE45::solve()
+void baseODE45::solve(std::vector<double> init_initial_conditions)
 {
-   std::vector<double> X, C, K1, K2, K3, K4;
+    res.clear();
+    res.push_back(init_initial_conditions);
 
-   X = res.back();
+    solve();
+}
+void baseODE45::solve(double init_step_length, unsigned init_amount_steps)
+{
+    step_length         = init_step_length;
+    amount_steps        = init_amount_steps;
 
-   for (unsigned step = 0; step < amount_steps; ++step)
-   {
-       solve_one_step(X, C, K1, K2, K3, K4);
-   }
+    solve();
 }
 
-
-inline void ODE45::solve_one_step(    std::vector<double> &X
-                                    , std::vector<double> &C
-                                    , std::vector<double> &K1
-                                    , std::vector<double> &K2
-                                    , std::vector<double> &K3
-                                    , std::vector<double> &K4   )
+void baseODE45::solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps)
 {
-   K1 = calc_func(X);
-   K2 = calc_func(calc_K_by_h_div_2(X,K1,step_length));
-   K3 = calc_func(calc_K_by_h_div_2(X,K2,step_length));
-   K4 = calc_func(calc_K_by_h(X,K1,step_length));
+    step_length         = init_step_length;
+    amount_steps        = init_amount_steps;
+    res.clear();
+    res.push_back(init_initial_conditions);
 
-   X = calc_new_X(X, K1, K2, K3, K4, step_length);
-   res.push_back(X);
+    LM(LI, "Start solve for ODE45 with configure ALL parameters step_length:" + std::to_string(step_length) + " steps:" + std::to_string(amount_steps));
+
+    solve();
+}
+
+void baseODE45::solve()
+{
+    if (res.size() == 0)
+    {
+        LM(LE, "Need to set initial conditions for ODE");
+        assert(false);
+    }
+    std::vector<double> X, C, K1, K2, K3, K4;
+
+    X = res.back();
+
+    for (unsigned step = 0; step < amount_steps; ++step)
+    {
+
+        solve_one_step(X, C, K1, K2, K3, K4);
+    }
 }
 ////////////
-////////////        END Solver with different parameters
+////////////        END Different solver's run functions for solver
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        Helper functions for solver
 ////////////
-std::vector<double> ODE45::calc_K_by_h(std::vector<double> const &X, std::vector<double> const &K, double const &h)
+inline void baseODE45::solve_one_step(    std::vector<double> &X
+                                    , std::vector<double> &C
+                                    , std::vector<double> &K1
+                                    , std::vector<double> &K2
+                                    , std::vector<double> &K3
+                                    , std::vector<double> &K4   )
+{
+    K1 = calcFunc(X);
+    K2 = calcFunc(calc_K_by_h_div_2(X,K1,step_length));
+    K3 = calcFunc(calc_K_by_h_div_2(X,K2,step_length));
+    K4 = calcFunc(calc_K_by_h(X,K1,step_length));
+
+    X = calc_new_X(X, K1, K2, K3, K4, step_length);
+    res.push_back(X);
+}
+
+
+std::vector<double> baseODE45::calc_K_by_h(std::vector<double> const &X, std::vector<double> const &K, double const &h)
 {
     std::vector<double> res(X.size());
 
@@ -101,7 +148,8 @@ std::vector<double> ODE45::calc_K_by_h(std::vector<double> const &X, std::vector
     return res;
 }
 
-std::vector<double> ODE45::calc_new_X(std::vector<double> const &X
+
+std::vector<double> baseODE45::calc_new_X(std::vector<double> const &X
         , std::vector<double> const &K1
         , std::vector<double> const &K2
         , std::vector<double> const &K3
@@ -121,8 +169,6 @@ std::vector<double> ODE45::calc_new_X(std::vector<double> const &X
 ////////////
 ////////////        END Helper functions for solver
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
 

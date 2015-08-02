@@ -9,60 +9,90 @@
 #define SRC_ODE45_ODE45_H_
 
 #include <vector>
+#include <fstream>
+
+#include "../debugLog/debugLog.h"
 #include "../common.h"
 
-class ODE45
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////        Basic class for function is used in ODE
+class baseODEfunction
 {
 public:
+    baseODEfunction() {}
+    virtual ~baseODEfunction() {}
 
-    ODE45() {}
-    virtual ~ODE45() {}
+    virtual std::vector<double> calcFunc(std::vector<double> const &X) = 0;
+};
+////////////        END Basic class for function is used in ODE
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////        BASE ODE class
+class baseODE45
+{
+public:
+    baseODE45(){}
+    baseODE45(baseODEfunction* init_function) { pFunction = init_function; }
+    ~baseODE45() { delete pFunction; }
+
+    void set_pFunction(baseODEfunction* init_function) {pFunction = init_function;}
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////        Pure virtual function to specify solving function
+    virtual std::vector<double> calcFunc(std::vector<double> const &X) {return pFunction->calcFunc(X);}
+    ////////////        END Pure virtual function to specify solving function
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////        Functions to get a result
-    bool result_write_to_file(const char* file_name) { return write_to_file(file_name, res); }
-
     std::vector<std::vector<double> > result_take() { return res; }
 
     std::vector<std::vector<double> >::iterator result_iterator_begin() { return res.begin(); }
     std::vector<std::vector<double> >::iterator result_iterator_end() { return res.end(); }
 
-    std::vector<double> result_last() { return res.back(); }
+    bool result_write_to_file(const char *file_name) { return write_to_file(file_name, res); }
     ////////////        END Functions to get a result
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////        Initialize functions for solver
+    void solve_init(std::vector<double> const &init_initial_conditions);
+    void solve_init(double const &init_step_length, unsigned const &init_amount_steps);
+    void solve_init(std::vector<double> const &init_initial_conditions, double const &init_step_length);
+    void solve_init(std::vector<double> const &init_initial_conditions, double const &init_step_length, unsigned const &init_amount_steps);
+
+    void solve_init_step_length(double const &init_step_length);
+    ////////////        END Initialize functions for solver
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////        Different solver's run functions for solver
     void solve();
     void solve(unsigned init_amount_steps);
     void solve(std::vector<double> init_initial_conditions);
     void solve(double init_step_length, unsigned init_amount_steps);
     void solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps);
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////        Functions to set up initial conditions
-    void set_initial_conditions(std::vector<double> init_initial_conditions) { res.clear(); res.push_back(init_initial_conditions); }
-    void set_step_length(double init_step_length) { step_length = init_step_length; }
-    void set_amount_steps(unsigned init_amount_steps) { amount_steps = init_amount_steps; }
-    ////////////        END Functions to set up initial conditions
+    ////////////        END Different solver's run functions for solver
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////        Pure virtual function to specify solving function
-    virtual std::vector<double> calc_func(std::vector<double> X) = 0;
-    ////////////        END Pure virtual function to specify solving function
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector<double> solve_get_next()
+    {
+        solve(1);
+        return res.back();
+    }
 
 
 protected:
-
-    std::vector<std::vector<double> > res;
-
     double      step_length     {0.1};
     unsigned    amount_steps    {10};
 
-    std::vector<double> initial_conditions;
-
+    std::vector<std::vector<double> > res;
 
 private:
 
@@ -86,7 +116,13 @@ private:
                                 , std::vector<double> &K2
                                 , std::vector<double> &K3
                                 , std::vector<double> &K4       );
+
+    baseODEfunction* pFunction  {0};
 };
+////////////        END BASE ODE class
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 #endif /* SRC_ODE45_ODE45_H_ */

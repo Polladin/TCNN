@@ -12,23 +12,32 @@
 
 #include "../../../common/ODE45/ODE45.h"
 
-class Chaotic : public ODE45
-{
 
+class Chaotic1 : public baseODEfunction
+{
 public:
 
-    void solve(std::vector<double> init_initial_conditions, double init_step_length, unsigned init_amount_steps)
+    virtual std::vector<double> calcFunc(std::vector<double> const &X)
     {
-        ODE45::solve(init_initial_conditions, init_step_length, init_amount_steps);
+        std::vector<double> dX(X.size());
+
+        dX[0] = 1;
+        dX[1] = X[2];
+        dX[2] = X[3];
+        dX[3] = (-0.44 * X[3] - 2 * X[2] + (X[1] * X[1] - 1)); //return (-0.44 * z - 2 * y + (x * x - 1)); //func_dE(z);
+
+        return dX;
     }
-
-    void solve(unsigned init_amount_steps)
-    {
-        ODE45::solve(init_amount_steps);
-    }
-
-    virtual std::vector<double> calc_func(std::vector<double> X);
-
 };
+
+
+class ChaoticFunction1
+{
+public:
+    ChaoticFunction1(): chaos(new Chaotic1){}
+
+    baseODE45 chaos;
+};
+
 
 #endif /* CPP_TCNN_OPT_FUNCTION_CHAOTIC_CHAOTIC_H_ */
