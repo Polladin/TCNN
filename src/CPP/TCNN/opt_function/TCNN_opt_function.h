@@ -11,15 +11,15 @@
 #include <vector>
 
 #include "../chaotic/chaotic.h"
-#include "../../../common/ODE45/ODE45.h"
-
+#include "../../common/ODE45/ODE45.h"
+#include "functions/func_to_optimize.h"
 
 class TCNN_opt_function : public baseODE45
 {
 public:
     TCNN_opt_function();
-    TCNN_opt_function(baseODEfunction *init_chaotic_function);
-    ~TCNN_opt_function(){};
+    TCNN_opt_function(baseODE45 *init_chaotic_function, OptimizedFunc *optimized_function);
+    ~TCNN_opt_function(){ delete chaos_fuction; delete optimized_function; };
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////        Virtual function to specify solving function
@@ -81,16 +81,17 @@ public:
 
     void recalc_chaotic_reduce_coeff() { chaotic_reduce_coeff = 1 - step_length / 100.0; }
 
-    double df_gen(double x, double h);
-
-    double func(double x);
+//    double df_gen(double x, double h);
+//
+//    double func(double x);
 
     bool write_func_to_file(double x_begin, double x_end, unsigned steps, const char* file_name);
 
     bool write_chaos_to_file(const char* file_name);
 
 private:
-    baseODE45 chaos_fuction;
+    baseODE45       *chaos_fuction;
+    OptimizedFunc   *optimized_function;
 
     double chaotic_coeff            {10};
     double chaotic_reduce_coeff     {0.999};

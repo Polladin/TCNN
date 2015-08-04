@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 #include <string.h>
-
+#include <sstream>
 
 enum dispLogMode
 {
@@ -32,7 +32,7 @@ enum log_lvl_const
 
 extern dispLogMode   LOG_MODE;
 extern log_lvl_const DISP_LOG_LVL;
-
+extern std::ostringstream tmp_log_ostringstream;
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 

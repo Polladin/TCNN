@@ -10,10 +10,10 @@
 
 #include <vector>
 
-#include "../../../common/ODE45/ODE45.h"
+#include "../../common/ODE45/ODE45.h"
 
 
-class Chaotic1 : public baseODEfunction
+class Chaotic1 : public baseODE45
 {
 public:
 
@@ -28,15 +28,6 @@ public:
 
         return dX;
     }
-};
-
-
-class ChaoticFunction1
-{
-public:
-    ChaoticFunction1(): chaos(new Chaotic1){}
-
-    baseODE45 chaos;
 };
 
 

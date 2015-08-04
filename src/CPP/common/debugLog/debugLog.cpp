@@ -8,6 +8,9 @@
 #include "debugLog.h"
 #include "configLogging.h"
 
+
+std::ostringstream tmp_log_ostringstream;
+
 namespace logging
 {
 
@@ -61,6 +64,7 @@ inline bool is_not_in_disbled_log_list(const char *file)
 }
 
 
+//void print_log(std::string const &str, unsigned const &lvl, const char* file, int const &line)
 void print_log(std::string const &str, unsigned const &lvl, const char* file, int const &line)
 {
     switch (LOG_MODE)

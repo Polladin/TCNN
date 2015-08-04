@@ -88,7 +88,10 @@ void baseODE45::solve(std::vector<double> init_initial_conditions, double init_s
     res.clear();
     res.push_back(init_initial_conditions);
 
-    LM(LI, "Start solve for ODE45 with configure ALL parameters step_length:" + std::to_string(step_length) + " steps:" + std::to_string(amount_steps));
+    tmp_log_ostringstream.clear();
+    tmp_log_ostringstream << "Start solve for ODE45 with configure ALL parameters step_length:" << step_length << " steps:" << amount_steps;
+    LM(LI, tmp_log_ostringstream.str());
+    //LM(LI, "Start solve for ODE45 with configure ALL parameters step_length:" + std::to_string(step_length) + " steps:" + std::to_string(amount_steps));
 
     solve();
 }

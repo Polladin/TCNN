@@ -8,10 +8,11 @@
 #if 1
 
 #include <string.h>
+#include <stdlib.h>
 
 #include "../../../common/debugLog/debugLog.h"
-#include "../functions/TCNN_opt_function.h"
-#include "../chaotic/chaotic.h"
+#include "../TCNN_opt_function.h"
+#include "../../chaotic/chaotic.h"
 #include "../../../common/ODE45/ODE45.h"
 #include "../../../common/common.h"
 
@@ -38,12 +39,19 @@ int main(int argc, char* argv[])
         if (strcmp(argv[i],"--steps") == 0 && (i+1 < argc))
         {
             steps = atof(argv[++i]);
-            LM(LI, "Set steps: " + std::to_string(steps));
+
+            tmp_log_ostringstream.clear();
+            tmp_log_ostringstream << "Set steps: " << steps;
+            LM(LI, tmp_log_ostringstream.str());
+//            LM(LI, "Set steps: " + std::to_string(steps));
         }
         else if (strcmp(argv[i],"--step_len") == 0 && (i+1 < argc))
         {
             step_len = atof(argv[++i]);
-            LM(LI, "Set step length: " + std::to_string(step_len));
+
+            tmp_log_ostringstream.clear();
+            tmp_log_ostringstream <<"Set step length: " << step_len;
+//            LM(LI, "Set step length: " + std::to_string(step_len));
         }
     }
 
