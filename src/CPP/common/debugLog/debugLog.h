@@ -36,7 +36,13 @@ extern std::ostringstream tmp_log_ostringstream;
 
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-#define LM(lvl,str) logging::print_log(str, lvl, __FILENAME__, __LINE__);
+#define LM(lvl,str) tmp_log_ostringstream << str;                               \
+                    logging::print_log(tmp_log_ostringstream, lvl, __FILENAME__, __LINE__);
+
+//tmp_log_ostringstream.seekp(0);
+//                    tmp_log_ostringstream.clear();
+
+//#define TO_SS(str) tmp_log_ostringstream << str; print();
 
 namespace logging
 {
@@ -46,6 +52,8 @@ const char* toString(log_lvl_const const &lvl);
 void write_to_log(std::string const &str, unsigned const &lvl, const char* file, int const &line);
 
 void print_log(std::string const &str, unsigned const &lvl, const char* file, int const &line);
+
+void print_log(std::ostringstream const &str, unsigned const &lvl, const char* file, int const &line);
 
 
 }// end namespace logging

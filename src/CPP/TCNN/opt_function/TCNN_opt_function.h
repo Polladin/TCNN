@@ -18,8 +18,17 @@ class TCNN_opt_function : public baseODE45
 {
 public:
     TCNN_opt_function();
+    TCNN_opt_function(unsigned amount_chaotic_functions);
     TCNN_opt_function(baseODE45 *init_chaotic_function, OptimizedFunc *optimized_function);
-    ~TCNN_opt_function(){ delete chaos_fuction; delete optimized_function; };
+    ~TCNN_opt_function()
+    {
+        for(auto *p_chaos : chaos_fuctions)
+        {
+            delete p_chaos;
+        }
+//        delete chaos_fuction;
+        delete optimized_function;
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////        Virtual function to specify solving function
@@ -31,6 +40,8 @@ public:
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////        Initialize function
+    void init_optimizer_fuction(OptimizedFunc *init_optimized_function);
+
     void init_optimizer(  std::vector<double> const &init_initial_conditions
                         , double const &init_step_length
                         , unsigned const &init_amount_steps
@@ -63,7 +74,8 @@ public:
     void init_optimizer_alpha                   (double const &init_alpha);
     void init_optimizer_step_length_wo_recalc_chaotic_reduce_coeff (double const &init_step_length);
 
-    void init_chaotic(std::vector<double> const &init_initial_conditions, double const &init_step_length);
+
+    void init_chaotic(std::vector<std::vector<double> > const &init_initial_conditions, double const &init_step_length);
     void init_chaotic(double const &init_step_length);
     ////////////        END Initialize function
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,8 +102,15 @@ public:
     bool write_chaos_to_file(const char* file_name);
 
 private:
-    baseODE45       *chaos_fuction;
-    OptimizedFunc   *optimized_function;
+    bool isInitialConditionsHasSameDimentions(std::vector<std::vector<double> > const &init_initial_conditions);
+
+
+//    std::vector<baseODE45*>       chaos_fuction;
+//    baseODE45*                  chaos_fuction;
+    std::vector<baseODE45*>     chaos_fuctions;
+    OptimizedFunc               *optimized_function;
+
+    std::vector<std::vector<double> > initial_conditions;
 
     double chaotic_coeff            {10};
     double chaotic_reduce_coeff     {0.999};

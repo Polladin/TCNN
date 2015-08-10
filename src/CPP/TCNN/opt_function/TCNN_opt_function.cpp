@@ -7,6 +7,8 @@
 
 #include <fstream>
 #include <cmath>
+#include <random>
+#include <stdio.h>
 
 #include "TCNN_opt_function.h"
 #include "../../common/debugLog/debugLog.h"
@@ -53,6 +55,13 @@ void TCNN_opt_function::init_optimizer_step_length_wo_recalc_chaotic_reduce_coef
     step_length = init_step_length;
 }
 
+
+void TCNN_opt_function::init_optimizer_fuction(OptimizedFunc *init_optimized_function)
+{
+    delete optimized_function;
+
+    optimized_function = init_optimized_function;
+}
 
 
 void TCNN_opt_function::init_optimizer(   std::vector<double> const &init_initial_conditions
@@ -108,13 +117,38 @@ void TCNN_opt_function::init_optimizer(   double const &init_chaotic_coeff
     init_optimizer_chaotic_reduce_coeff(init_chaotic_reduce_coeff);
 }
 
-void TCNN_opt_function::init_chaotic(std::vector<double> const &init_initial_conditions, double const &init_step_length)
+
+
+
+
+
+void TCNN_opt_function::init_chaotic(std::vector<std::vector<double> > const &init_initial_conditions, double const &init_step_length)
 {
-    chaos_fuction->solve_init(init_initial_conditions, init_step_length);
+    if (!isInitialConditionsHasSameDimentions(init_initial_conditions)) return;
+
+    std::vector<std::vector<double> >::const_iterator it_initial_conditions = init_initial_conditions.begin();
+    for (auto *p_chaos : chaos_fuctions)
+    {
+        p_chaos->solve_init(*it_initial_conditions, init_step_length);
+        ++it_initial_conditions;
+    }
 }
+
 void TCNN_opt_function::init_chaotic(double const &init_step_length)
 {
-    chaos_fuction->solve_init_step_length(init_step_length);
+    init_chaotic(initial_conditions, init_step_length);
+}
+
+
+bool TCNN_opt_function::isInitialConditionsHasSameDimentions(std::vector<std::vector<double> > const &init_initial_conditions)
+{
+    if (init_initial_conditions.size() != chaos_fuctions.size())
+    {
+        LM(LE, "Size of vector with initial conditions are not equal to size of vector chaotic functions");
+        return false;
+    }
+
+    return true;
 }
 ////////////
 ////////////        END Initialize function
@@ -132,10 +166,30 @@ TCNN_opt_function::TCNN_opt_function()
     X.push_back(0);
     X.push_back(0);
 
-    init_optimizer_initial_conditions(X);
+//    init_optimizer_initial_conditions(X);
 
-    chaos_fuction = new Chaotic1;
-    chaos_fuction->solve_init(X, step_length);
+    chaos_fuctions.push_back(new Chaotic1);
+    for (baseODE45 *p_chaos : chaos_fuctions) p_chaos->solve_init(X, step_length);
+
+//    chaos_fuction = new Chaotic1;
+//    chaos_fuction->solve_init(X, step_length);
+
+    optimized_function = new OptimizedFunc_1;
+}
+
+TCNN_opt_function::TCNN_opt_function(unsigned amount_chaotic_functions)
+{
+    for (unsigned i = 0; i < amount_chaotic_functions; ++i)
+    {
+        std::vector<double> X;
+        X.push_back(0);
+        X.push_back( 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2);
+        X.push_back(0);
+        X.push_back(0);
+
+        chaos_fuctions.push_back(new Chaotic1);
+        chaos_fuctions.back()->solve_init(X, step_length);
+    }
 
     optimized_function = new OptimizedFunc_1;
 }
@@ -148,10 +202,13 @@ TCNN_opt_function::TCNN_opt_function(baseODE45 *init_chaotic_function, Optimized
     X.push_back(0);
     X.push_back(0);
 
-    init_optimizer_initial_conditions(X);
+//    init_optimizer_initial_conditions(X);
 
-    chaos_fuction = init_chaotic_function;
-    chaos_fuction->solve_init(X, step_length);
+    chaos_fuctions.push_back(init_chaotic_function);
+    for (baseODE45 *p_chaos : chaos_fuctions) p_chaos->solve_init(X, step_length);
+
+//    chaos_fuction = init_chaotic_function;
+//    chaos_fuction->solve_init(X, step_length);
 
     optimized_function = init_optimized_function;
 }
@@ -209,10 +266,19 @@ void TCNN_opt_function::run_optimization(std::vector<double> const &init_initial
 std::vector<double> TCNN_opt_function::calcFunc(std::vector<double> const &X)
 {
     std::vector<double> dX(X.size());
-    std::vector<double> chaoticValue = chaos_fuction->solve_get_next();
+    std::vector<double> chaoticValue;
+
+    for (auto *p_chaos : chaos_fuctions)
+    {
+        std::vector<double> tmp = p_chaos->solve_get_next();
+        chaoticValue.push_back(tmp[3]);
+    }
 
     dX[0] = 1;
-    dX[1] = chaotic_coeff*chaoticValue[3] - alpha * optimized_function->dF(X,1,0.00001); //  df_gen(X[1], 0.00001); //chaoticValue[2]
+    for (unsigned i = 1; i < X.size(); ++i)
+    {
+        dX[i] = chaotic_coeff*chaoticValue[i-1] - alpha * optimized_function->dF(X,i,0.00001);
+    }
 
     chaotic_coeff *= chaotic_reduce_coeff;
 
@@ -252,6 +318,13 @@ bool TCNN_opt_function::write_func_to_file(double x_begin, double x_end, unsigne
 
 bool TCNN_opt_function::write_chaos_to_file(const char* file_name)
 {
-    return write_to_file(file_name, chaos_fuction->result_take());
+    char buff[255];
+    unsigned idx = 0;
+    for (auto *p_chaos : chaos_fuctions)
+    {
+        sprintf(buff, "%s_%u",file_name, idx++);
+        write_to_file(buff, p_chaos->result_take());
+    }
+    return true;
 }
 

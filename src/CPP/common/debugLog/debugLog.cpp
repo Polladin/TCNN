@@ -34,8 +34,9 @@ void write_to_log(std::string const &str, unsigned const &lvl, const char* file,
 {
     if (lvl >= DISP_LOG_LVL)
     {
-        std::cout << file << "[" << line << "]:" <<toString(log_lvl_const(lvl)) << str << std::endl;
+        std::cout << file << "[" << line << "]:" <<toString(log_lvl_const(lvl)) << str << std::endl << std::ends;
     }
+    tmp_log_ostringstream.str("");
 }
 
 
@@ -79,6 +80,26 @@ void print_log(std::string const &str, unsigned const &lvl, const char* file, in
 
     case DISABLED_LIST:
         if (is_not_in_disbled_log_list(file)) write_to_log(str, lvl, file, line);
+        break;
+    }
+
+}
+
+
+void print_log(std::ostringstream const &str, unsigned const &lvl, const char* file, int const &line)
+{
+    switch (LOG_MODE)
+    {
+    case ALL:
+        write_to_log(str.str(), lvl, file, line);
+        break;
+
+    case ENABLED_LIST:
+        if (is_in_enable_log_list(file)) write_to_log(str.str(), lvl, file, line);
+        break;
+
+    case DISABLED_LIST:
+        if (is_not_in_disbled_log_list(file)) write_to_log(str.str(), lvl, file, line);
         break;
     }
 

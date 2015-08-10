@@ -84,6 +84,21 @@ class OptimizedFunc_3 : public OptimizedFunc
 
 
 
+/*
+ *     3D Function:
+ *                  sin^2(3*PI*X) + (X-1)^2 * (1+sin^2(3*PI*Y)) + (Y-1)^2 * (1+sin(2*PI*Y))
+ */
+class OptimizedFunc_4 : public OptimizedFunc
+{
+    virtual double fVal(std::vector<double> X)
+    {
+        return std::sin(3*PI*X[1])*std::sin(3*PI*X[1])
+                + (X[1]-1)*(X[1]-1) * (1 + std::sin(3*PI*X[2])*std::sin(3*PI*X[2]))
+                + (X[2]-1)*(X[2]-1) * (1 + std::sin(2*PI*X[2])*std::sin(2*PI*X[2]));
+    }
+};
+
+
 
 
 #endif /* FUNC_TO_OPTIMIZE_H_ */

@@ -29,7 +29,7 @@ bool write_to_file(const char* file_name, std::vector<std::vector<double> > cons
     }
     catch(...)
     {
-        LM(LE, "while writing to file " + std::string(file_name));
+        LM(LE, "while writing to file " << file_name);
         return false;
     }
 
