@@ -23,3 +23,24 @@ std::vector<double> OptimizedFunc::vectorSummOneDim(std::vector<double> X, unsig
 
     return X;
 }
+
+
+OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func)
+{
+    switch(func)
+    {
+    case eFunctionsToOptimize::FUNC_1_2D:
+        return new OptimizedFunc_1;
+
+    case eFunctionsToOptimize::FUNC_2_2D:
+        return new OptimizedFunc_2;
+
+    case eFunctionsToOptimize::FUNC_3_3D:
+        return new OptimizedFunc_3;
+
+    case eFunctionsToOptimize::FUNC_4_3D:
+        return new OptimizedFunc_4;
+    default:
+        return nullptr;
+    }
+}

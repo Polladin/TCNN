@@ -40,6 +40,18 @@ private:
 
 
 
+enum class eFunctionsToOptimize
+{
+      NONE
+    , FUNC_1_2D
+    , FUNC_2_2D
+    , FUNC_3_3D
+    , FUNC_4_3D
+    , THE_LAST
+};
+
+
+OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func);
 
 
 /*

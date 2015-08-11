@@ -15,12 +15,15 @@
 #include "../../chaotic/chaotic.h"
 #include "../../../common/ODE45/ODE45.h"
 #include "../../../common/common.h"
+#include "../functions/func_to_optimize.h"
 
 const double DEFAULT_STEPS          = 10;
 const double DEFAULT_STEP_LENGTH    = 0.1;
 const double DEFAULT_ALPHA          = 0.5;
 const double DEFAULT_CHAOTIC_COEFF  = 10;
 const double DEFAULT_CHAOTIC_REDUCE = 0.999;
+
+const int DEFAULT_OPT_FUNC     = static_cast<int>(eFunctionsToOptimize::FUNC_1_2D);
 
 char buf[255];
 
@@ -37,6 +40,8 @@ int main(int argc, char* argv[])
                 , alpha = 0
                 , chaotic_coeff = 0
                 , chaotic_reduce = 0;
+
+    eFunctionsToOptimize function_to_optimize = eFunctionsToOptimize::FUNC_4_3D;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -66,6 +71,21 @@ int main(int argc, char* argv[])
         {
             chaotic_reduce = atof(argv[++i]);
             LM(LI, "chaotic_reduce: " << chaotic_reduce);
+        }
+        else if (strcmp(argv[i],"--function") == 0 && (i+1 < argc))
+        {
+            int __func = atoi(argv[++i]);
+            LM(LI, "function: " << __func);
+            if (   __func > static_cast<int>(eFunctionsToOptimize::NONE)
+                && __func < static_cast<int>(eFunctionsToOptimize::THE_LAST) )
+            {
+                function_to_optimize = static_cast<eFunctionsToOptimize>(__func);
+            }
+            else
+            {
+                LM(LE, "function is not in valid range")
+            }
+
         }
     }
 
@@ -106,7 +126,7 @@ int main(int argc, char* argv[])
     testFunc.init_optimizer_chaotic_coeff(chaotic_coeff);
     testFunc.init_optimizer_chaotic_reduce_coeff(chaotic_reduce);
 
-    testFunc.init_optimizer_fuction(new OptimizedFunc_4);
+    testFunc.init_optimizer_fuction(createFuncToOptimize(function_to_optimize));
 
     std::vector<double> init;
     init.push_back(0);

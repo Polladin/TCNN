@@ -9,6 +9,8 @@
 #include <cmath>
 #include <random>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "TCNN_opt_function.h"
 #include "../../common/debugLog/debugLog.h"
@@ -179,11 +181,26 @@ TCNN_opt_function::TCNN_opt_function()
 
 TCNN_opt_function::TCNN_opt_function(unsigned amount_chaotic_functions)
 {
+    double rand_initial_cond;
+
+    srand (time(0));
+
+    for (int i=0; i<100; ++i)
+    {
+        rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
+
+//        LM(LI, "rand initial cond: " << rand_initial_cond)
+    }
+
     for (unsigned i = 0; i < amount_chaotic_functions; ++i)
     {
+        rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
+
+        LM(LI, "rand initial cond: " << rand_initial_cond)
+
         std::vector<double> X;
         X.push_back(0);
-        X.push_back( 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2);
+        X.push_back(rand_initial_cond);
         X.push_back(0);
         X.push_back(0);
 
