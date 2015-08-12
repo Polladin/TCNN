@@ -52,3 +52,43 @@ def subplot(XX, amount_subplots, index, col = 1):
 
     return res
 
+
+'''
+Fill array with data from external file
+'''
+def fill_data_from_file(file_name):
+    XX = []
+
+    f = open(file_name, 'r')
+
+    for line in f:
+        XX.append([])
+        for num in line.split():
+            XX[-1].append(num)
+
+    return XX
+
+'''
+Plot All data from file
+'''
+def plot_from_file(result_file_name):
+    XX = fill_data_from_file(result_file_name)
+
+    return plot_all(XX)
+
+
+'''
+Plot data on one the part
+'''
+def sub_plot_from_file(result_file_name, amount_plots, index, col = 1):
+    XX = fill_data_from_file(result_file_name)
+
+    res = subplot(XX, amount_plots, index, col)
+
+    print (result_file_name + ":")
+    print (XX[-1])
+
+    if index == amount_plots:
+        plt.show()
+
+    return res
