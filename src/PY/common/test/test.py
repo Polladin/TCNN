@@ -65,7 +65,7 @@ def run_case_2():
         , "--chaotic_reduce", "0.9995"
         , "--function", "2"])
 
-    sub_plot_find_path(RESULT_FILE_PATH_OPT, 3, 1))
+    sub_plot_find_path(RESULT_FILE_PATH_OPT, 3, 1)
 
     sub_plot_from_file(RESULT_FILE_PATH, 3, 1)
     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 2)
