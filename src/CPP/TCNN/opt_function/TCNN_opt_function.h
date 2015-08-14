@@ -82,7 +82,7 @@ public:
 
 
 
-    std::vector<std::vector<double> > result_take() { return res; }
+    std::vector<std::vector<double> > result_take()  { return res; }
     bool result_write_to_file(const char* file_name) { return write_to_file(file_name, res); }
 
     void run_optimization();

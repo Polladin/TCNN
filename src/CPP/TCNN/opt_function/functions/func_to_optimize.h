@@ -50,6 +50,7 @@ enum class eFunctionsToOptimize
     , THE_LAST
 };
 
+char const* toString(eFunctionsToOptimize func);
 
 OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func);
 

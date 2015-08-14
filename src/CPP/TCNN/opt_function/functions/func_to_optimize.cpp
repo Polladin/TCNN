@@ -44,3 +44,31 @@ OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func)
         return nullptr;
     }
 }
+
+
+char const* toString(eFunctionsToOptimize func)
+{
+    switch(func)
+    {
+    case eFunctionsToOptimize::NONE:
+        return "NONE";
+
+    case eFunctionsToOptimize::FUNC_1_2D:
+        return "FUNC_1_2D";
+
+    case eFunctionsToOptimize::FUNC_2_2D:
+        return "FUNC_2_2D";
+
+    case eFunctionsToOptimize::FUNC_3_3D:
+        return "FUNC_3_3D";
+
+    case eFunctionsToOptimize::FUNC_4_3D:
+        return "FUNC_4_3D";
+
+    case eFunctionsToOptimize::THE_LAST:
+        return "THE_LAST";
+
+    default:
+        return "NOT FOUND";
+    }
+}

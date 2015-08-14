@@ -32,8 +32,9 @@ struct CLI_opt_func
 
     eFunctionsToOptimize function_to_optimize {eFunctionsToOptimize::FUNC_4_3D};
 
-
     void parse_cli(int argc, char* argv[]);
+
+    void disp();
 };
 
 

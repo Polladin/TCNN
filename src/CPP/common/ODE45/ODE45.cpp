@@ -109,7 +109,6 @@ void baseODE45::solve()
 
     for (unsigned step = 0; step < amount_steps; ++step)
     {
-
         solve_one_step(X, C, K1, K2, K3, K4);
     }
 }
