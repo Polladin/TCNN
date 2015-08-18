@@ -37,7 +37,8 @@ def run_case_1():
         , "--alpha", "0.3"
         , "--chaotic_coeff", "3"
         , "--chaotic_reduce", "0.9995"
-        , "--function", "1"])
+        , "--function", "1"
+        , "--init_cond", "0,-0.8"])
 
     sub_plot_find_path(RESULT_FILE_PATH_OPT, 3, 1)
 
@@ -63,7 +64,8 @@ def run_case_2():
         , "--alpha", "0.3"
         , "--chaotic_coeff", "3"
         , "--chaotic_reduce", "0.9995"
-        , "--function", "2"])
+        , "--function", "2"
+        , "--init_cond", "0,3.5"])
 
     sub_plot_find_path(RESULT_FILE_PATH_OPT, 3, 1)
 
@@ -83,12 +85,13 @@ def run_case_2():
  '''
 def run_case_3():
     subprocess.check_call([WIN_BIN_OPT_FUNC
-        , "--steps", "8000"
+        , "--steps", "2000"
         , "--step_len", "0.1"
         , "--alpha", "0.3"
         , "--chaotic_coeff", "3"
         , "--chaotic_reduce", "0.9995"
-        , "--function", "3"])
+        , "--function", "3"
+        , "--init_cond", "0,-2,-2"])
 
     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 1)
     sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS+"_0", 3, 2, 3)
@@ -125,7 +128,7 @@ def run_case_4():
 
 
 run_case_1()
-# run_case_2()
+#run_case_2()
 # run_case_3()
 # run_case_4()
 

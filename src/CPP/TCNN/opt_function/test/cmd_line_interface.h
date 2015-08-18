@@ -8,6 +8,7 @@
 #ifndef CMD_LINE_INTERFACE_H_
 #define CMD_LINE_INTERFACE_H_
 
+#include <vector>
 
 #include "../functions/func_to_optimize.h"
 
@@ -24,11 +25,13 @@ const int DEFAULT_OPT_FUNC     = static_cast<int>(eFunctionsToOptimize::FUNC_1_2
 
 struct CLI_opt_func
 {
-    double        steps             {0}
-                , step_len          {0}
-                , alpha             {0}
-                , chaotic_coeff     {0}
-                , chaotic_reduce    {0};
+    double        steps             {DEFAULT_STEPS}
+                , step_len          {DEFAULT_STEP_LENGTH}
+                , alpha             {DEFAULT_ALPHA}
+                , chaotic_coeff     {DEFAULT_CHAOTIC_COEFF}
+                , chaotic_reduce    {DEFAULT_CHAOTIC_REDUCE};
+
+    std::vector<double> initial_condition;
 
     eFunctionsToOptimize function_to_optimize {eFunctionsToOptimize::FUNC_4_3D};
 

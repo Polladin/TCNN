@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <cstring>
 
 #include "../../../common/debugLog/debugLog.h"
 #include "../functions/func_to_optimize.h"
@@ -57,20 +58,22 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
             {
                 LM(LE, "function is not in valid range")
             }
-
         }
         else if (strcmp(argv[i],"--init_cond") == 0 && (i+1 < argc))
         {
-           char buff[100];
            char* str = argv[++i];
 
-           unsigned index = 0;
-           while(index < strlen(str))
-           {
+           LM(LI, "Set Initial Condition")
 
+           char * pch = strtok(str, ",");
+           while (pch != NULL)
+           {
+               double init_cond_val = atof(pch);
+               LM(LI, atof(pch));
+               initial_condition.push_back(init_cond_val);
+
+               pch = strtok (NULL, ",");
            }
-            chaotic_reduce = atof(argv[++i]);
-            LM(LI, "chaotic_reduce: " << chaotic_reduce);
         }
     }
 

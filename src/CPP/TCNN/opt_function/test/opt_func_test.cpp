@@ -38,6 +38,8 @@ int main(int argc, char* argv[])
     testFunc.init_optimizer_chaotic_reduce_coeff(cli.chaotic_reduce);
 
     testFunc.init_optimizer_fuction(createFuncToOptimize(cli.function_to_optimize));
+    if (cli.initial_condition.size())
+        testFunc.init_optimizer_initial_conditions(cli.initial_condition);
 
     std::vector<double> init;
     init.push_back(0);
@@ -49,7 +51,15 @@ int main(int argc, char* argv[])
         init.push_back(-0.3);
     }
 
-    testFunc.run_optimization(init, cli.step_len, cli.steps);
+    if (cli.initial_condition.size())
+    {
+        testFunc.run_optimization(cli.step_len, cli.steps);
+    }
+    else
+    {
+        testFunc.run_optimization(init, cli.step_len, cli.steps);
+    }
+
 
     testFunc.write_chaos_to_file("chaos.log");
     testFunc.result_write_to_file("opt_func_res.log");
