@@ -57,6 +57,38 @@ void TCNN_opt_function::init_optimizer_step_length_wo_recalc_chaotic_reduce_coef
     step_length = init_step_length;
 }
 
+void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& amount_chaotic_functions)
+{
+    double rand_initial_cond;
+    srand (time(0));
+
+    for(auto *elem : chaos_fuctions)
+    {
+        delete elem;
+    }
+    chaos_fuctions.clear();
+
+    for (int i=0; i<100; ++i)
+    {
+        rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
+    }
+
+    for (unsigned i = 0; i < amount_chaotic_functions; ++i)
+    {
+        rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
+
+        LM(LI, "rand initial cond: " << rand_initial_cond)
+
+        std::vector<double> X;
+        X.push_back(0);
+        X.push_back(rand_initial_cond);
+        X.push_back(0);
+        X.push_back(0);
+
+        chaos_fuctions.push_back(new Chaotic1);
+        chaos_fuctions.back()->solve_init(X, step_length);
+    }
+}
 
 void TCNN_opt_function::init_optimizer_fuction(OptimizedFunc *init_optimized_function)
 {
@@ -168,45 +200,15 @@ TCNN_opt_function::TCNN_opt_function()
     X.push_back(0);
     X.push_back(0);
 
-//    init_optimizer_initial_conditions(X);
-
     chaos_fuctions.push_back(new Chaotic1);
     for (baseODE45 *p_chaos : chaos_fuctions) p_chaos->solve_init(X, step_length);
-
-//    chaos_fuction = new Chaotic1;
-//    chaos_fuction->solve_init(X, step_length);
 
     optimized_function = new OptimizedFunc_1;
 }
 
-TCNN_opt_function::TCNN_opt_function(unsigned amount_chaotic_functions)
+TCNN_opt_function::TCNN_opt_function(unsigned const &amount_chaotic_functions)
 {
-    double rand_initial_cond;
-
-    srand (time(0));
-
-    for (int i=0; i<100; ++i)
-    {
-        rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
-
-//        LM(LI, "rand initial cond: " << rand_initial_cond)
-    }
-
-    for (unsigned i = 0; i < amount_chaotic_functions; ++i)
-    {
-        rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
-
-        LM(LI, "rand initial cond: " << rand_initial_cond)
-
-        std::vector<double> X;
-        X.push_back(0);
-        X.push_back(rand_initial_cond);
-        X.push_back(0);
-        X.push_back(0);
-
-        chaos_fuctions.push_back(new Chaotic1);
-        chaos_fuctions.back()->solve_init(X, step_length);
-    }
+    init_optimizer_set_amount_chaotic_func(amount_chaotic_functions);
 
     optimized_function = new OptimizedFunc_1;
 }

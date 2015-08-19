@@ -17,6 +17,7 @@ RESULT_FILE_PATH_OPT_CHAOS = "chaos.log"
 WIN_BIN_OPT_FUNC = "D:/progs/Cygwin/home/akukushk/TCNN/src/CPP/build/opt_func_test.exe"
 
 import subprocess
+import ctypes
 
 #import ../plot as plot_lib
 #from ..plot import *
@@ -24,6 +25,86 @@ import subprocess
 import matplotlib.pyplot as plt
 
 from common.plot.plot import *
+from ctypes import cdll
+
+
+
+def run_case_1_from_lib():
+    lib = cdll.LoadLibrary('./TCNN_lib.so')
+
+    argv = [WIN_BIN_OPT_FUNC
+        , "--steps", "5000"
+        , "--step_len", "0.1"
+        , "--alpha", "0.3"
+        , "--chaotic_coeff", "3"
+        , "--chaotic_reduce", "0.9995"
+        , "--function", "1"
+        , "--init_cond", "0,-2.8"]
+
+    amount_strs = len(argv)
+
+    max_len = len(max(argv, key=len))
+
+    s = [ctypes.create_string_buffer(max_len) for i in range(amount_strs)]
+    results = (ctypes.c_char_p * amount_strs)(*map(ctypes.addressof, s));
+
+    for i in range(len(argv)):
+        results[i] = argv[i]
+
+    lib.opt_func_like_main(amount_strs, results)
+
+
+    sub_plot_find_path(RESULT_FILE_PATH_OPT, 3, 1)
+
+    sub_plot_from_file(RESULT_FILE_PATH, 3, 1)
+    sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 2)
+    res = sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS+"_0", 3, 3, 3)
+
+    print (res)
+
+
+
+
+def run_case_1_from_DLL_obj():
+    lib = cdll.LoadLibrary('./TCNN_lib.so')
+
+    argv = [WIN_BIN_OPT_FUNC
+        , "--steps", "2000"
+        , "--step_len", "0.1"
+        , "--alpha", "0.3"
+        , "--chaotic_coeff", "3"
+        , "--chaotic_reduce", "0.9995"
+        , "--function", "1"
+        , "--init_cond", "0,-2.8"]
+
+    amount_strs = len(argv)
+
+    max_len = len(max(argv, key=len))
+
+    s = [ctypes.create_string_buffer(max_len) for i in range(amount_strs)]
+    results = (ctypes.c_char_p * amount_strs)(*map(ctypes.addressof, s));
+
+    for i in range(len(argv)):
+        results[i] = argv[i]
+
+    optFunc = lib.optFuncCreateDLL();
+
+    lib.optFuncSetInitialConditionByArgvDLL(optFunc, amount_strs, results)
+
+    lib.optFuncRunOptimizationDLL(optFunc)
+
+#     lib.optFuncWriteResultDLL(optFunc, "DLL_opt_func_result.log")
+
+    rows = lib.optFunctGetResultRows(optFunc)
+    columns = lib.optFunctGetResultColumns(optFunc)
+    data = ctypes.ARRAY(ctypes.c_double, rows*columns)()
+
+    lib.optFuncTakeResultDLL(optFunc, data)
+    plt.plot(data[:rows], data[rows:])
+
+    plt.show()
+
+
 
 
 '''
@@ -127,7 +208,9 @@ def run_case_4():
 '''
 
 
-run_case_1()
+run_case_1_from_DLL_obj()
+#run_case_1_from_lib()
+# run_case_1()
 #run_case_2()
 # run_case_3()
 # run_case_4()

@@ -22,7 +22,7 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
 
         if (strcmp(argv[i],"--steps") == 0 && (i+1 < argc))
         {
-            steps = atof(argv[++i]);
+            steps = static_cast<unsigned>(atof(argv[++i]));
             LM(LI, "Set steps: " << steps);
         }
         else if (strcmp(argv[i],"--step_len") == 0 && (i+1 < argc))

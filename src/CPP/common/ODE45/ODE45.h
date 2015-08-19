@@ -69,6 +69,9 @@ public:
         return res.back();
     }
 
+    unsigned resultRowsAmount()     { return res.size(); }
+    unsigned resultColumnsAmount()  { return res.size() ? res[0].size() : 0; }
+
 
 protected:
     double      step_length     {0.1};

@@ -4,16 +4,16 @@ CC=g++
 
 CFLAGS=-c -std=c++11 -Wall #-c
 
-SRC= 	../common/debugLog/debugLog.cpp 				\
+SRC= ../common/debugLog/debugLog.cpp 					\
 	../common/ODE45/ODE45.cpp							\
 	../common/test/unit_test.cpp						\
 	../TCNN/chaotic/chaotic.cpp							\
 	../TCNN/opt_function/TCNN_opt_function.cpp			\
 	../common/common.cpp								\
-	../TCNN/opt_function/test/opt_func_test.cpp			\
 	../TCNN/opt_function/functions/func_to_optimize.cpp	\
+	../TCNN/opt_function/test/opt_func_test.cpp			\
 	../TCNN/opt_function/test/cmd_line_interface.cpp
-
+	
 
 ALL_SRC=	\
 	../common/debugLog/debugLog.cpp 					\

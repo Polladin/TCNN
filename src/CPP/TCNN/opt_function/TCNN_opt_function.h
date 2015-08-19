@@ -18,7 +18,7 @@ class TCNN_opt_function : public baseODE45
 {
 public:
     TCNN_opt_function();
-    TCNN_opt_function(unsigned amount_chaotic_functions);
+    TCNN_opt_function(unsigned const &amount_chaotic_functions);
     TCNN_opt_function(baseODE45 *init_chaotic_function, OptimizedFunc *optimized_function);
     ~TCNN_opt_function()
     {
@@ -26,7 +26,7 @@ public:
         {
             delete p_chaos;
         }
-//        delete chaos_fuction;
+
         delete optimized_function;
     }
 
@@ -73,6 +73,8 @@ public:
     void init_optimizer_chaotic_reduce_coeff    (double const &init_chaotic_reduce_coeff);
     void init_optimizer_alpha                   (double const &init_alpha);
     void init_optimizer_step_length_wo_recalc_chaotic_reduce_coeff (double const &init_step_length);
+
+    void init_optimizer_set_amount_chaotic_func (unsigned const& amount_chaotic_functions);
 
 
     void init_chaotic(std::vector<std::vector<double> > const &init_initial_conditions, double const &init_step_length);
