@@ -26,6 +26,8 @@ bool write_to_file(const char* file_name, std::vector<std::vector<double> > cons
             }
             file_out << "\n";
         }
+
+        LM(LI, "file has been created : " << file_name);
     }
     catch(...)
     {

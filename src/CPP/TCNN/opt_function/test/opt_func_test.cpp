@@ -5,7 +5,7 @@
  *      Author: alex
  */
 
-#if 1
+#if 0
 
 #include <string.h>
 #include <stdlib.h>
