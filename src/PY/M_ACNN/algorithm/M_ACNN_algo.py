@@ -2,7 +2,8 @@
 
 #from Dynamic_learning.algorithm.RKF import *
 
-import common.M_ACNN.RKF as rkf
+
+import M_ACNN.algorithm.RKF as rkf
 
 import math
 
