@@ -19,9 +19,9 @@ LINE_AMOUNT = 10 #5
 
 NUM_STEPS = 5000
 
-intern_state = [[[0]*4 for i in range(NUM_NEURONS)] for j in range(NUM_STEPS)] #np.array([])
-I = [] #[0] * NUM_NEURONS
-W = [[0]*NUM_NEURONS for i in range(NUM_NEURONS)] #np.array([])
+intern_state = [[[0]*4 for i in range(NUM_NEURONS)] for j in range(NUM_STEPS)]
+I = []
+W = [[0]*NUM_NEURONS for i in range(NUM_NEURONS)]
 
 patterns = [] #np.array([])
 
@@ -34,7 +34,6 @@ def read_in_pattern():
     arr.append([])
 
     for line in pattern_in_file:
-#         print (line)
         for num in line.split():
             if int(num) == 0:
                 arr[-1].append(-1)
@@ -116,9 +115,9 @@ def learning():
 
 
 #     for i in range(NUM_NEURONS):
-# #         norm_w = norm(i)
+#         norm_w = norm(i)
 #         for j in range(NUM_NEURONS):
-#             W[i][j] = W[i][j] / NUM_NEURONS #norm_w
+#             W[i][j] = W[i][j] / norm_w #NUM_NEURONS #
 
 
 def calc_Dxy(step):
@@ -195,9 +194,7 @@ def show_picture(Out_pattern, fig, num_row, num_col, plt_idx):
 '''
 def run():
     global intern_state
-#     print(W)
 
-#     print(intern_state[0][0])
     read_patterns()
     print(W)
     learning()
@@ -240,16 +237,10 @@ def run():
                 show_picture(get_out(intern_state[sstep+1]), fig1, 5, 10, idx)
                 idx += 1
 
-
     print("Done")
 
-
     show_picture(get_out(intern_state[-2]), fig1, 5, 10, idx)
-
-#     for i in range(6):
-#         show_picture(get_out(intern_state[-2]), fig1, 3, 2, i)
-
-    plt.show()
+#     plt.show()
 
     arr_val = []
     arr_time = []
@@ -259,6 +250,8 @@ def run():
 
     print(arr_time)
     print(arr_val)
+
+    plt.figure(2)
 
     plt.plot(arr_time, arr_val)
     plt.show()
