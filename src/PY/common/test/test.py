@@ -105,6 +105,43 @@ def run_case_1_from_DLL_obj():
     plt.show()
 
 
+'''
+ *      Function:
+ *                  (X-0.9)^2 + cos(3*PI*(X-0.9))
+'''
+def run_N_dim():
+    subprocess.check_call([WIN_BIN_OPT_FUNC
+        , "--steps", "30000"
+        , "--step_len", "0.001"
+        , "--alpha", "1"
+        , "--chaotic_coeff", "800"
+        , "--chaotic_reduce", "0.99995"
+        , "--function", "5"
+        , "--dim", "1"
+        , "--init_cond", "0, 1.8"] ) #, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, 1.8, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, 1.8, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9"])
+
+#     X = fill_data_from_file(RESULT_FILE_PATH_OPT)
+
+#     sub_plot_find_path(RESULT_FILE_PATH_OPT, 1, 1)
+
+#     XX = fill_data_from_file(RESULT_FILE_PATH_OPT)
+
+#     print(XX)
+
+#     sub_plot_from_file(RESULT_FILE_PATH, 3, 1, 1)
+#     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 1, 1)
+#     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 2, 2)
+#     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 3, 3)
+
+#     sub_plot_from_file(RESULT_FILE_PATH, 1, 1)
+
+    plot_amount = 1
+    for i in range(plot_amount):
+        sub_plot_from_file(RESULT_FILE_PATH_OPT, plot_amount, i+1, i+1)
+
+#     res = sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS+"_0", 3, 3, 3)
+
+#     return(res)
 
 
 '''
@@ -207,8 +244,8 @@ def run_case_4():
     MAIN
 '''
 
-
-run_case_1_from_DLL_obj()
+run_N_dim()
+# run_case_1_from_DLL_obj()
 #run_case_1_from_lib()
 # run_case_1()
 #run_case_2()

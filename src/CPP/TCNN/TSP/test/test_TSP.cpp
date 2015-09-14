@@ -6,7 +6,7 @@
  */
 
 
-#if 1
+#if 0
 
 
 #include "../TSPsolver.h"

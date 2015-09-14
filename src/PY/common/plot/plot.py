@@ -40,7 +40,7 @@ def plot_all(XX):
 
 
 
-def subplot(XX, amount_subplots, index, col = 1):
+def subplot(XX, amount_subplots, index = 1, col = 1):
     [err, res] = check_min_2_colums(XX)
 
     if err:
@@ -80,7 +80,7 @@ def plot_from_file(result_file_name):
 '''
 Plot data on one the part
 '''
-def sub_plot_from_file(result_file_name, amount_plots, index, col = 1):
+def sub_plot_from_file(result_file_name, amount_plots, index = 1, col = 1):
     XX = fill_data_from_file(result_file_name)
 
     res = subplot(XX, amount_plots, index, col)

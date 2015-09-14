@@ -15,6 +15,7 @@
 
 
 const unsigned DEFAULT_STEPS        = 10;
+const unsigned DEFAULT_DIMENSION    = 10;
 const double DEFAULT_STEP_LENGTH    = 0.1;
 const double DEFAULT_ALPHA          = 0.5;
 const double DEFAULT_CHAOTIC_COEFF  = 10;
@@ -26,6 +27,7 @@ const int DEFAULT_OPT_FUNC     = static_cast<int>(eFunctionsToOptimize::FUNC_1_2
 struct CLI_opt_func
 {
     unsigned      steps             {DEFAULT_STEPS};
+    unsigned      dimension         {DEFAULT_DIMENSION};
 
     double        step_len          {DEFAULT_STEP_LENGTH}
                 , alpha             {DEFAULT_ALPHA}

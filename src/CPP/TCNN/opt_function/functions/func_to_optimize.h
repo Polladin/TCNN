@@ -47,6 +47,7 @@ enum class eFunctionsToOptimize
     , FUNC_2_2D
     , FUNC_3_3D
     , FUNC_4_3D
+    , FUNC_5_3D
     , THE_LAST
 };
 
@@ -111,6 +112,37 @@ class OptimizedFunc_4 : public OptimizedFunc
     }
 };
 
+
+/*
+ *     N*D Function:
+ *                  f(x) = 10n + Sum(x(i)^2 - 10cos(2pi*x(i)))
+ */
+class OptimizedFunc_5 : public OptimizedFunc
+{
+public:
+    OptimizedFunc_5(unsigned init_dimension): dimension(init_dimension) {}
+
+    OptimizedFunc_5() {}
+
+
+private:
+    virtual double fVal(std::vector<double> X)
+    {
+        double res = 10.0 * dimension;
+
+        for(unsigned i = 0; i < dimension; ++i)
+        {
+            res += X[1+i] * X[1+i] - 10 * std::cos(2 * PI * X[1+i]);
+        }
+
+        return res;
+    }
+
+
+
+
+    unsigned dimension {1};
+};
 
 
 

@@ -40,6 +40,9 @@ OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func)
 
     case eFunctionsToOptimize::FUNC_4_3D:
         return new OptimizedFunc_4;
+
+    case eFunctionsToOptimize::FUNC_5_3D:
+        return new OptimizedFunc_5(3);
     default:
         return nullptr;
     }
@@ -64,6 +67,9 @@ char const* toString(eFunctionsToOptimize func)
 
     case eFunctionsToOptimize::FUNC_4_3D:
         return "FUNC_4_3D";
+
+    case eFunctionsToOptimize::FUNC_5_3D:
+        return "FUNC_5_3D";
 
     case eFunctionsToOptimize::THE_LAST:
         return "THE_LAST";

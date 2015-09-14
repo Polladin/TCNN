@@ -25,6 +25,11 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
             steps = static_cast<unsigned>(atof(argv[++i]));
             LM(LI, "Set steps: " << steps);
         }
+        else if (strcmp(argv[i],"--dim") == 0 && (i+1 < argc))
+        {
+            dimension = static_cast<unsigned>(atof(argv[++i]));
+            LM(LI, "Set dimension: " << dimension);
+        }
         else if (strcmp(argv[i],"--step_len") == 0 && (i+1 < argc))
         {
             step_len = atof(argv[++i]);
