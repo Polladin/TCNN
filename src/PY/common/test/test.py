@@ -23,6 +23,8 @@ import ctypes
 #from ..plot import *
 
 import matplotlib.pyplot as plt
+import math
+import random
 
 from common.plot.plot import *
 from ctypes import cdll
@@ -109,16 +111,27 @@ def run_case_1_from_DLL_obj():
  *      Function:
  *                  (X-0.9)^2 + cos(3*PI*(X-0.9))
 '''
-def run_N_dim():
+def run_N_dim(dim):
+
+    random.seed()
+
+    init_cond = '0'
+    for i in range(dim):
+        init_cond += ', ' + str((random.random()-0.5)*10)
+
+    print (init_cond)
+#0, -2.91390797751, 1.94005208823, -3.9011124444, -1.51972470693, 3.57775812322, -2.89826140281, 4.80608980877, -3.43612785435, 2.35672655962, 4.8499752525, 1.55583452182, 4.01655082987, -4.96777414788, 3.20264640854, -4.00995659717, -4.36198468508, 4.52249834155, 4.54700744199, 0.344288020182, 4.3256256062, 4.69193484689, 3.39881798533, -3.48823300319, -2.2041100248, -2.97365342168, -4.12237968019, -1.82323246241, -4.27959232412, 4.34788259037, -0.694539446176
     subprocess.check_call([WIN_BIN_OPT_FUNC
-        , "--steps", "30000"
+        , "--steps", "15000"
         , "--step_len", "0.001"
-        , "--alpha", "1"
-        , "--chaotic_coeff", "800"
-        , "--chaotic_reduce", "0.99995"
+        , "--chaotic_step_len", "0.15"
+        , "--alpha", "0.2"
+        , "--chaotic_coeff", "40000" #800
+        , "--chaotic_reduce", "0.5"
         , "--function", "5"
-        , "--dim", "1"
-        , "--init_cond", "0, 1.8"] ) #, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, 1.8, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, 1.8, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9"])
+        , "--dim", str(dim)
+        , "--init_cond", init_cond])
+#         , "--init_cond", "0, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, 1.8, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, 1.8, 2.8, 3.8, 1.8, 2.8, 3.8, -1.2, -3.0, -0.8, 1.9, -1.9"])
 
 #     X = fill_data_from_file(RESULT_FILE_PATH_OPT)
 
@@ -133,12 +146,26 @@ def run_N_dim():
 #     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 2, 2)
 #     sub_plot_from_file(RESULT_FILE_PATH_OPT, 3, 3, 3)
 
-#     sub_plot_from_file(RESULT_FILE_PATH, 1, 1)
+#     sub_plot_find_path(RESULT_FILE_PATH_OPT, 1, 1)
+#     sub_plot_from_file(RESULT_FILE_PATH, 2, 1)
+#     sub_plot_from_file(RESULT_FILE_PATH_OPT, 1, 1)
 
-    plot_amount = 1
-    for i in range(plot_amount):
-        sub_plot_from_file(RESULT_FILE_PATH_OPT, plot_amount, i+1, i+1)
+#     plot_amount = 6
+#     for i in range(plot_amount):
+#         sub_plot_from_file(RESULT_FILE_PATH_OPT, plot_amount, i+1, i+1)
+    XX = fill_data_from_file(RESULT_FILE_PATH_OPT)
 
+    bad = 0
+    print(XX[-1])
+    for i in range(len(XX[-1])):
+#         print (XX[-1][i])
+        if abs(float(XX[-1][i])) > 0.1:
+#             print('bad')
+            bad += 1
+
+    print('failed : ' + str(len(XX[-1])-1) + '/' + str(bad-1))
+
+    return bad-1
 #     res = sub_plot_from_file(RESULT_FILE_PATH_OPT_CHAOS+"_0", 3, 3, 3)
 
 #     return(res)
@@ -244,7 +271,26 @@ def run_case_4():
     MAIN
 '''
 
-run_N_dim()
+EXPERIMENTS_AMOUNT = 100
+
+res = 0
+res_one_test = 0
+fails_amount = 0
+for i in range(EXPERIMENTS_AMOUNT):
+    res_one_test = run_N_dim(30)
+    if res_one_test > 0:
+        res += 1
+        fails_amount += res_one_test
+    print('>>>>> TESTING INFO <<<<<<')
+    print('tests complete: ' + str(i+1))
+    print ('result: ' + str(EXPERIMENTS_AMOUNT) + '/' + str(res))
+    print ('fails: ' + str(fails_amount))
+    print('>>>>> TESTING INFO <<<<<<')
+
+print('---------------- TOTAL RESULT -------------------')
+print ('result: ' + str(EXPERIMENTS_AMOUNT) + '/' + str(res))
+print ('fails: ' + str(fails_amount))
+
 # run_case_1_from_DLL_obj()
 #run_case_1_from_lib()
 # run_case_1()

@@ -35,6 +35,11 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
             step_len = atof(argv[++i]);
             LM(LI, "Set step length: " << step_len);
         }
+        else if (strcmp(argv[i],"--chaotic_step_len") == 0 && (i+1 < argc))
+        {
+            chaotic_step_len = atof(argv[++i]);
+            LM(LI, "Set chaotic step length: " << chaotic_step_len);
+        }
         else if (strcmp(argv[i],"--alpha") == 0 && (i+1 < argc))
         {
             alpha = atof(argv[++i]);

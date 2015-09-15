@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
     }
 
     //TCNN_opt_function testFunc(2);
-    TCNN_opt_function testFunc(cli.dimension);
+    TCNN_opt_function testFunc(cli.dimension, cli.chaotic_step_len);
 
     testFunc.init_optimizer_alpha(cli.alpha);
     testFunc.init_optimizer_chaotic_coeff(cli.chaotic_coeff);
@@ -51,10 +51,10 @@ int main(int argc, char* argv[])
 
     testFunc.run_optimization(cli.step_len, cli.steps);
 
-    testFunc.write_chaos_to_file("chaos.log");
+//    testFunc.write_chaos_to_file("chaos.log");
     testFunc.result_write_to_file("opt_func_res.log");
 
-    testFunc.write_func_to_file(-5.12, 5.12, 10000, "function.log");
+//    testFunc.write_func_to_file(-5.12, 5.12, 10000, "function.log");
 
     /*
     std::vector<double> init;

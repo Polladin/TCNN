@@ -57,7 +57,7 @@ void TCNN_opt_function::init_optimizer_step_length_wo_recalc_chaotic_reduce_coef
     step_length = init_step_length;
 }
 
-void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& amount_chaotic_functions)
+void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& amount_chaotic_functions, double chaotic_step_length)
 {
     double rand_initial_cond;
     srand (time(0));
@@ -86,7 +86,7 @@ void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& 
         X.push_back(0);
 
         chaos_fuctions.push_back(new Chaotic1);
-        chaos_fuctions.back()->solve_init(X, step_length);
+        chaos_fuctions.back()->solve_init(X, chaotic_step_length);
     }
 }
 
@@ -206,9 +206,9 @@ TCNN_opt_function::TCNN_opt_function()
     optimized_function = new OptimizedFunc_1;
 }
 
-TCNN_opt_function::TCNN_opt_function(unsigned const &amount_chaotic_functions)
+TCNN_opt_function::TCNN_opt_function(unsigned const &amount_chaotic_functions, double chaotic_step_length)
 {
-    init_optimizer_set_amount_chaotic_func(amount_chaotic_functions);
+    init_optimizer_set_amount_chaotic_func(amount_chaotic_functions, chaotic_step_length);
 
     optimized_function = new OptimizedFunc_1;
 }
@@ -293,13 +293,15 @@ std::vector<double> TCNN_opt_function::calcFunc(std::vector<double> const &X)
         chaoticValue.push_back(tmp[3]);
     }
 
+    double exp_chaotic_coeff = chaotic_coeff / std::exp(X[0] * chaotic_reduce_coeff);
+
     dX[0] = 1;
     for (unsigned i = 1; i < X.size(); ++i)
     {
-        dX[i] = chaotic_coeff*chaoticValue[i-1] - alpha * optimized_function->dF(X,i,0.00001);
+        dX[i] = exp_chaotic_coeff*chaoticValue[i-1] - alpha * optimized_function->dF(X,i,0.00001);
     }
 
-    chaotic_coeff *= chaotic_reduce_coeff;
+//    chaotic_coeff *= chaotic_reduce_coeff;
 
     return dX;
 }

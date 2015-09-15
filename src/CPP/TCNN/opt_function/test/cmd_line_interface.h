@@ -14,25 +14,28 @@
 
 
 
-const unsigned DEFAULT_STEPS        = 10;
-const unsigned DEFAULT_DIMENSION    = 10;
-const double DEFAULT_STEP_LENGTH    = 0.1;
-const double DEFAULT_ALPHA          = 0.5;
-const double DEFAULT_CHAOTIC_COEFF  = 10;
-const double DEFAULT_CHAOTIC_REDUCE = 0.999;
+const unsigned DEFAULT_STEPS                = 10;
+const unsigned DEFAULT_DIMENSION            = 10;
+const double DEFAULT_STEP_LENGTH            = 0.1;
+const double DEFAULT_CHAOTIC_STEP_LENGTH    = 0.1;
+const double DEFAULT_ALPHA                  = 0.5;
+const double DEFAULT_CHAOTIC_COEFF          = 10;
+const double DEFAULT_CHAOTIC_REDUCE         = 0.999;
 
 const int DEFAULT_OPT_FUNC     = static_cast<int>(eFunctionsToOptimize::FUNC_1_2D);
 
 
 struct CLI_opt_func
 {
-    unsigned      steps             {DEFAULT_STEPS};
-    unsigned      dimension         {DEFAULT_DIMENSION};
+    unsigned      steps                 {DEFAULT_STEPS};
+    unsigned      dimension             {DEFAULT_DIMENSION};
 
-    double        step_len          {DEFAULT_STEP_LENGTH}
-                , alpha             {DEFAULT_ALPHA}
-                , chaotic_coeff     {DEFAULT_CHAOTIC_COEFF}
-                , chaotic_reduce    {DEFAULT_CHAOTIC_REDUCE};
+    double        step_len              {DEFAULT_STEP_LENGTH}
+                , chaotic_step_len      {DEFAULT_CHAOTIC_STEP_LENGTH}
+                , alpha                 {DEFAULT_ALPHA}
+                , chaotic_coeff         {DEFAULT_CHAOTIC_COEFF}
+                , chaotic_reduce        {DEFAULT_CHAOTIC_REDUCE};
+
 
     std::vector<double> initial_condition;
 

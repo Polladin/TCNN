@@ -97,7 +97,7 @@ def sub_plot_from_file(result_file_name, amount_plots, index = 1, col = 1):
 def sub_plot_find_path(file_name, amount_plots, index):
     XX = fill_data_from_file(file_name)
 
-    plt.subplot(3, 1, 1)
+    plt.subplot(2, 1, 1)
 
     for i in range(0,len(XX),20):
         plt.plot([XX[i][1], XX[i][1]],[-2, 10], 'g')
