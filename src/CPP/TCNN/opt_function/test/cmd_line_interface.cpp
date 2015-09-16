@@ -23,42 +23,42 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
         if (strcmp(argv[i],"--steps") == 0 && (i+1 < argc))
         {
             steps = static_cast<unsigned>(atof(argv[++i]));
-            LM(LI, "Set steps: " << steps);
+            LM(LD, "Set steps: " << steps);
         }
         else if (strcmp(argv[i],"--dim") == 0 && (i+1 < argc))
         {
             dimension = static_cast<unsigned>(atof(argv[++i]));
-            LM(LI, "Set dimension: " << dimension);
+            LM(LD, "Set dimension: " << dimension);
         }
         else if (strcmp(argv[i],"--step_len") == 0 && (i+1 < argc))
         {
             step_len = atof(argv[++i]);
-            LM(LI, "Set step length: " << step_len);
+            LM(LD, "Set step length: " << step_len);
         }
         else if (strcmp(argv[i],"--chaotic_step_len") == 0 && (i+1 < argc))
         {
             chaotic_step_len = atof(argv[++i]);
-            LM(LI, "Set chaotic step length: " << chaotic_step_len);
+            LM(LD, "Set chaotic step length: " << chaotic_step_len);
         }
         else if (strcmp(argv[i],"--alpha") == 0 && (i+1 < argc))
         {
             alpha = atof(argv[++i]);
-            LM(LI, "alpha: " << alpha);
+            LM(LD, "alpha: " << alpha);
         }
         else if (strcmp(argv[i],"--chaotic_coeff") == 0 && (i+1 < argc))
         {
             chaotic_coeff = atof(argv[++i]);
-            LM(LI, "chaotic_coeff: " << chaotic_coeff);
+            LM(LD, "chaotic_coeff: " << chaotic_coeff);
         }
         else if (strcmp(argv[i],"--chaotic_reduce") == 0 && (i+1 < argc))
         {
             chaotic_reduce = atof(argv[++i]);
-            LM(LI, "chaotic_reduce: " << chaotic_reduce);
+            LM(LD, "chaotic_reduce: " << chaotic_reduce);
         }
         else if (strcmp(argv[i],"--function") == 0 && (i+1 < argc))
         {
             int __func = atoi(argv[++i]);
-            LM(LI, "function: " << __func);
+            LM(LD, "function: " << __func);
             if (   __func > static_cast<int>(eFunctionsToOptimize::NONE)
                 && __func < static_cast<int>(eFunctionsToOptimize::THE_LAST) )
             {
@@ -73,13 +73,13 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
         {
            char* str = argv[++i];
 
-           LM(LI, "Set Initial Condition")
+           LM(LD, "Set Initial Condition")
 
            char * pch = strtok(str, ",");
            while (pch != NULL)
            {
                double init_cond_val = atof(pch);
-               LM(LI, atof(pch));
+               LM(LD, atof(pch));
                initial_condition.push_back(init_cond_val);
 
                pch = strtok (NULL, ",");

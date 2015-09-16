@@ -2,7 +2,7 @@
 
 CC=g++
 
-CFLAGS=-c -std=c++11 -Wall #-c
+CFLAGS=-c -std=c++11 -Wall -O3 #-c
 
 SRC= ../common/debugLog/debugLog.cpp 					\
 	../common/ODE45/ODE45.cpp							\

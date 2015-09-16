@@ -12,6 +12,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <string>
+#include <sstream>
+
 #include "TCNN_opt_function.h"
 #include "../../common/debugLog/debugLog.h"
 #include "../../common/common.h"
@@ -59,6 +62,9 @@ void TCNN_opt_function::init_optimizer_step_length_wo_recalc_chaotic_reduce_coef
 
 void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& amount_chaotic_functions, double chaotic_step_length)
 {
+    std::ostringstream  initial_cond_to_log;
+    initial_cond_to_log << "0";
+
     double rand_initial_cond;
     srand (time(0));
 
@@ -77,7 +83,7 @@ void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& 
     {
         rand_initial_cond = 2.0 * (static_cast<double>(rand())/RAND_MAX-0.5) * 0.2;
 
-        LM(LI, "rand initial cond: " << rand_initial_cond)
+        initial_cond_to_log << ", " << rand_initial_cond;
 
         std::vector<double> X;
         X.push_back(0);
@@ -88,6 +94,8 @@ void TCNN_opt_function::init_optimizer_set_amount_chaotic_func (unsigned const& 
         chaos_fuctions.push_back(new Chaotic1);
         chaos_fuctions.back()->solve_init(X, chaotic_step_length);
     }
+
+    LM(LI, "chaotic initial conditions: " << initial_cond_to_log.str())
 }
 
 void TCNN_opt_function::init_optimizer_fuction(OptimizedFunc *init_optimized_function)
