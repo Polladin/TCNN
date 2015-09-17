@@ -306,7 +306,7 @@ std::vector<double> TCNN_opt_function::calcFunc(std::vector<double> const &X)
     dX[0] = 1;
     for (unsigned i = 1; i < X.size(); ++i)
     {
-        dX[i] = exp_chaotic_coeff*chaoticValue[i-1] - alpha * optimized_function->dF(X,i,0.00001);
+        dX[i] = exp_chaotic_coeff*chaoticValue[i-1] - alpha * optimized_function->dF(X,i,0.001); //0.00001
     }
 
 //    chaotic_coeff *= chaotic_reduce_coeff;

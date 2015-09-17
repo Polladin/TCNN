@@ -15,7 +15,7 @@
 
 
 const unsigned DEFAULT_STEPS                = 10;
-const unsigned DEFAULT_DIMENSION            = 10;
+const unsigned DEFAULT_DIMENSION            = 1;
 const double DEFAULT_STEP_LENGTH            = 0.1;
 const double DEFAULT_CHAOTIC_STEP_LENGTH    = 0.1;
 const double DEFAULT_ALPHA                  = 0.5;

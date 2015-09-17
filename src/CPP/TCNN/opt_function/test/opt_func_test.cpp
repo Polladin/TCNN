@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
     CLI_opt_func cli;
 
     cli.parse_cli(argc, argv);
+
     if(cli.dimension + 1 != cli.initial_condition.size())
     {
         LM(LE, "dimension is not match");
@@ -43,8 +44,8 @@ int main(int argc, char* argv[])
     testFunc.init_optimizer_chaotic_coeff(cli.chaotic_coeff);
     testFunc.init_optimizer_chaotic_reduce_coeff(cli.chaotic_reduce);
 
-    //testFunc.init_optimizer_fuction(createFuncToOptimize(cli.function_to_optimize));
-    testFunc.init_optimizer_fuction(new OptimizedFunc_5(cli.dimension));
+    testFunc.init_optimizer_fuction(createFuncToOptimize(cli.function_to_optimize, cli.dimension));
+//    testFunc.init_optimizer_fuction(new OptimizedFunc_5(cli.dimension));
 
     if (cli.initial_condition.size())
         testFunc.init_optimizer_initial_conditions(cli.initial_condition);
@@ -53,6 +54,7 @@ int main(int argc, char* argv[])
 
 //    testFunc.write_chaos_to_file("chaos.log");
     testFunc.result_write_to_file("opt_func_res.log");
+//    testFunc.write_func_to_file(-3.5, 3.5, 1000, "function.log");
 
 //    testFunc.write_func_to_file(-5.12, 5.12, 10000, "function.log");
 

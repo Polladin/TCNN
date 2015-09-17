@@ -87,11 +87,11 @@ void CLI_opt_func::parse_cli(int argc, char* argv[])
         }
     }
 
-    if (steps           == 0) steps         = DEFAULT_STEPS;
-    if (step_len        == 0) step_len      = DEFAULT_STEP_LENGTH;
-    if (alpha           == 0) alpha         = DEFAULT_ALPHA;
-    if (chaotic_coeff   == 0) chaotic_coeff = DEFAULT_CHAOTIC_COEFF;
-    if (chaotic_reduce  == 0) chaotic_reduce= DEFAULT_CHAOTIC_REDUCE;
+//    if (steps           == 0) steps         = DEFAULT_STEPS;
+//    if (step_len        == 0) step_len      = DEFAULT_STEP_LENGTH;
+//    if (alpha           == 0) alpha         = DEFAULT_ALPHA;
+//    if (chaotic_coeff   == 0) chaotic_coeff = DEFAULT_CHAOTIC_COEFF;
+//    if (chaotic_reduce  == 0) chaotic_reduce= DEFAULT_CHAOTIC_REDUCE;
 }
 
 double        steps             {0}

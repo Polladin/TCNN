@@ -9,6 +9,7 @@
 #define FUNC_TO_OPTIMIZE_H_
 
 #include "../../../common/common.h"
+#include "../../../common/debugLog/debugLog.h"
 #include <cmath>
 
 class OptimizedFunc
@@ -32,7 +33,7 @@ public:
 
 private:
 
-    std::vector<double> vectorSummOneDim(std::vector<double> X, unsigned dim, double val);
+    std::vector<double> vectorSummOneDim(std::vector<double> X, unsigned const &dim, double const& val);
 
     //deltaX to find derivative
     double deltaX    {0.00001};
@@ -47,13 +48,16 @@ enum class eFunctionsToOptimize
     , FUNC_2_2D
     , FUNC_3_3D
     , FUNC_4_3D
-    , FUNC_5_3D
+    , FUNC_5_ND     //Rastrigin function:       f(x) = 10n + Sum(x(i)^2 - 10cos(2pi*x(i)))
+    , FUNC_6_ND     //Ndim func:                f(x) = Sum((x(i))^2 - cos(3*PI*x(i)))
+    , FUNC_7_ND     //Schwefel function:        f(x) = Sum(-x(i)*sin(sqrt(abs(x(i)))))
+    , FUNC_8_ND     //Griewankg function:       f(x) = Sum(x(i)^2) / 4000 - Prod(cos(x(i)/sqrt(i))) + 1
     , THE_LAST
 };
 
 char const* toString(eFunctionsToOptimize func);
 
-OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func);
+OptimizedFunc* createFuncToOptimize(eFunctionsToOptimize const &func, unsigned dimension = 1);
 
 
 /*
@@ -114,8 +118,13 @@ class OptimizedFunc_4 : public OptimizedFunc
 
 
 /*
- *     N*D Function:
+ *     N dimensions Function:
+ *
+ *     Rastrigin function:
  *                  f(x) = 10n + Sum(x(i)^2 - 10cos(2pi*x(i)))
+ *
+ *          Global min:
+ *                  f(x) = 0 x(i) = 0
  */
 class OptimizedFunc_5 : public OptimizedFunc
 {
@@ -130,20 +139,123 @@ private:
     {
         double res = 10.0 * dimension;
 
-        for(unsigned i = 0; i < dimension; ++i)
+        for(unsigned i = 1; i <= dimension; ++i)
         {
-            res += X[1+i] * X[1+i] - 10 * std::cos(2 * PI * X[1+i]);
+            res += X[i] * X[i] - 10 * std::cos(2 * PI * X[i]);
         }
 
         return res;
     }
 
+    unsigned dimension {1};
+};
 
 
+
+/*
+ *   N dimensions  Function:
+ *                  f(x) = Sum((x(i))^2 - cos(3*PI*x(i)))
+ *
+ *          Global min:
+ *                  f(x) = -1*N x(i) = 0
+ */
+class OptimizedFunc_6 : public OptimizedFunc
+{
+public:
+
+    OptimizedFunc_6(unsigned init_dimension): dimension(init_dimension) {}
+
+    OptimizedFunc_6() {}
+
+private:
+
+    virtual double fVal(std::vector<double> X)
+    {
+        double res = 0;
+
+        for(unsigned i = 1; i <= dimension; ++i)
+        {
+            res += X[i]*X[i] - std::cos(3.0*PI*X[i]);
+        }
+
+        return res;
+    }
 
     unsigned dimension {1};
 };
 
+
+
+/*
+ *   N dimensions  Function:
+ *
+ *      Schwefel function:
+ *                  f(x) = Sum(-x(i)*sin(sqrt(abs(x(i)))))
+ *
+  *          Global min:
+ *                  f(x) = -N * 418.9829 x(i) = 420.9687
+ */
+class OptimizedFunc_7 : public OptimizedFunc
+{
+public:
+
+    OptimizedFunc_7(unsigned init_dimension): dimension(init_dimension) {}
+
+    OptimizedFunc_7() {}
+
+private:
+
+    virtual double fVal(std::vector<double> X)
+    {
+        double res = 0;
+
+        for(unsigned i = 1; i <= dimension; ++i)
+        {
+            res += -X[i] * std::sin(std::sqrt(std::abs(X[i])));
+        }
+
+        return res;
+    }
+
+    unsigned dimension {1};
+};
+
+
+/*
+ *   N dimensions  Function:
+ *
+ *      Griewankg function:
+ *                  f(x) = Sum(x(i)^2) / 4000 - Prod(cos(x(i)/sqrt(i))) + 1
+ *
+  *          Global min:
+ *                  f(x) = 0 x(i) = 0
+ */
+class OptimizedFunc_8 : public OptimizedFunc
+{
+public:
+
+    OptimizedFunc_8(unsigned init_dimension): dimension(init_dimension) {}
+
+    OptimizedFunc_8() {}
+
+private:
+
+    virtual double fVal(std::vector<double> X)
+    {
+        double res_sum  = 0;
+        double res_prod = 0;
+
+        for(unsigned i = 1; i <= dimension; ++i)
+        {
+            res_sum += X[i] * X[i];
+            res_prod *=  std::cos(X[i]/std::sqrt(i));
+        }
+
+        return res_sum / 4000.0 + res_prod + 1;
+    }
+
+    unsigned dimension {1};
+};
 
 
 #endif /* FUNC_TO_OPTIMIZE_H_ */
