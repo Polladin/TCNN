@@ -4,16 +4,16 @@ import math
 import random
 import matplotlib.pyplot as plt
 
-eps = 1
+eps = 0.01
 k = 1
-alpha = 0.001 #0.005
+alpha = 0.000001 #0.005
 I0 = 0.65
 beta = 0.00005
 
-STEPS_AMOUNT = 120000
-dimention = 2
+STEPS_AMOUNT = 100000
+dimention = 1
 
-MULT_COEFF = 4
+MULT_COEFF = 10
 
 dF_plot = [[0]*STEPS_AMOUNT for i in range(dimention)]
 
@@ -35,20 +35,29 @@ def run():
 
     Z[0] = 2
 
+
+
     calc(X,Y,Z, STEPS_AMOUNT-1, dimention)
 
 
-
+    tmp = []
     for i in range(dimention):
-        print(scale_X(X[i][-2]))
-        plt.subplot(dimention*2,1,i+1)
-        plt.plot(X[i], '.')
+        tmp.append(scale_X(X[i][-2]))
 
-    plt.subplot(dimention*2,1,3)
-    plt.plot(dF_plot[0], '.')
-    plt.subplot(dimention*2,1,4)
-    plt.plot(dF_plot[1], '.')
-    plt.show()
+    print(tmp)
+
+    print(cacl_Rastrigin_func(tmp))
+
+#     for i in range(dimention):
+#         print(scale_X(X[i][-2]))
+#         plt.subplot(dimention*2,1,i+1)
+#         plt.plot(X[i], '.')
+#
+#     plt.subplot(dimention*2,1,3)
+#     plt.plot(dF_plot[0], '.')
+#     plt.subplot(dimention*2,1,4)
+#     plt.plot(dF_plot[1], '.')
+#     plt.show()
 
 #     plt.subplot(2,1,1)
 #     plt.plot(X[-1], '.')
@@ -59,13 +68,44 @@ def run():
 
 #     plt.plot(column(X,0),column(X,1))
 
+
+#Schwefel f(x) = Sum(-x(i)*sin(sqrt(abs(x(i)))))   f(x) = -N * 418.9829 x(i) = 420.9687
+def cacl_Schwefel_func(X):
+    dim = len(X) - 1
+    res = 0
+
+    for i in range(dim):
+        res += -float(X[i+1]) * math.sin(math.sqrt(abs(float(X[i+1]))))
+
+    return res
+
+# Function: f(x) = Sum((x(i))^2 - cos(3*PI*x(i)))
+def calc_func_6(X):
+    dim = len(X) - 1
+    res = 0
+
+    for i in range(dim):
+        res += float(X[i+1]) * float(X[i+1]) - math.cos(3 * math.pi * float(X[i+1]))
+
+    return res
+
+
+def cacl_Rastrigin_func(X):
+    dim = len(X) - 1
+    res = 10 * dim
+
+    for i in range(dim):
+        res += float(X[i+1]) * float(X[i+1]) - 10 * math.cos(2 * math.pi * float(X[i+1]))
+
+    return res
+
 def scale_X(x):
     return (x-0.5)*MULT_COEFF
 
 def fVal(X, step, dimention):
     res = 10 * dimention
 
-    offset = -1
+    offset = 0
 
     for i in range(dimention):
         res += (scale_X(X[i][step])-offset) * (scale_X(X[i][step])-offset) - 10 * math.cos(2 * math.pi * (scale_X(X[i][step])-offset))

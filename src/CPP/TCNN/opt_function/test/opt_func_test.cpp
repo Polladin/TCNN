@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 
 //    testFunc.write_chaos_to_file("chaos.log");
     testFunc.result_write_to_file("opt_func_res.log");
-//    testFunc.write_func_to_file(-3.5, 3.5, 1000, "function.log");
+    testFunc.write_func_to_file(-4, 4, 1000, "function.log");
 
 //    testFunc.write_func_to_file(-5.12, 5.12, 10000, "function.log");
 

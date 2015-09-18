@@ -243,7 +243,7 @@ private:
     virtual double fVal(std::vector<double> X)
     {
         double res_sum  = 0;
-        double res_prod = 0;
+        double res_prod = 1;
 
         for(unsigned i = 1; i <= dimension; ++i)
         {
